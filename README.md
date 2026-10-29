@@ -1,73 +1,90 @@
-# 🛡️ Web Security, Bot Defense & Open Graph Template Suite
+# 🛡️ Web Security, Bot Defense & Automation Blueprint Suite
 
-This suite contains production-grade security header configurations, `robots.txt` crawler policies, and **Open Graph (OG) banner requirements & generator scripts**. You can drop these configurations directly into your other websites regardless of whether you host on **Firebase Hosting, Cloudflare Pages, Netlify, Vercel, Nginx, or Apache**.
+[![GitHub Private/Template](https://img.shields.io/badge/template-modular%20recipes-blue?logo=github)](https://github.com/18basils/web-security-templates)
+[![Security Grade](https://img.shields.io/badge/security%20headers-A%2B%20Target-brightgreen)](https://securityheaders.com)
+[![CSP Evaluator](https://img.shields.io/badge/CSP-Google%20Evaluator%20Clean-cyan)](https://csp-evaluator.withgoogle.com)
+[![PageSpeed](https://img.shields.io/badge/PageSpeed-95--100%20Target-orange)](https://pagespeed.web.dev/)
 
----
-
-## 📁 Included Template Files
-
-| File | Purpose / Platform |
-| :--- | :--- |
-| **`robots.template.txt`** | Universal `robots.txt` allowing verified search engines (Google, Bing, Apple) & social previewers (WhatsApp, Twitter, Slack), while blocking aggressive scrapers, AI dataset harvesters, exploit tools, and download folder indexing. |
-| **`firebase.template.json`** | Complete `firebase.json` headers configuration for Firebase Hosting with HSTS, strict CSP, X-Frame-Options, Permissions-Policy, and download protection. |
-| **`_headers.template`** | Universal `_headers` file for **Cloudflare Pages**, **Netlify**, or **Vercel**. |
-| **`security-headers.nginx.conf`** | Drop-in snippet for **Nginx** `server { ... }` blocks. |
-| **`.htaccess.template`** | Drop-in snippet for **Apache HTTP Server** (`.htaccess`). |
-| **`html-head-meta.template.html`** | HTML `<head>` SEO, OpenGraph cards, Twitter cards, PWA manifest, and canonical link boilerplate. |
-| **`opengraph-banner-requirements.template.md`** | Complete technical specifications for Open Graph banners: `1200 x 630` px dimensions, safe zone margins, the `< 300 KB` WhatsApp rule, and platform-by-platform behavior. |
-| **`generate_og_banner.template.py`** | Reusable standalone Python script using Pillow (`PIL`) that automatically creates a pixel-perfect, dark-gradient 1200x630 banner (< 300 KB) for any website in seconds. |
+A modular, production-grade security, optimization, and automation blueprint repository. Designed as an **Agent Execution Playbook** so developers and AI coding agents can parse conditional "Switch Cases" to patch security headers, bot defense policies, repository security, PageSpeed optimizations, and Open Graph cards into any project in seconds.
 
 ---
 
-## 🎨 Open Graph Banner Requirements Summary
+## 🤖 The AI Agent Playbook (`AGENT_RECIPES.md`)
 
-When generating an Open Graph banner (`og:image`) for any website:
+When working with an AI coding assistant, simply tell the agent:
+> *"Read `AGENT_RECIPES.md` from `web-security-templates` and patch my website for [Hosting: Firebase/Vercel/Render, Analytics: Enabled, OS Detection: Yes, Repo: Public/Private]."*
 
-1. **Dimensions**: Exactly **`1200 x 630` px** (Aspect ratio `1.91:1`).
-2. **File Size**: Must be **under 300 KB** (WhatsApp will refuse to display previews automatically if the image is > 300 KB).
-3. **Safe Zone**: Keep all essential titles, logos, and badges at least **80 px away from left/right** and **60 px away from top/bottom** to prevent cropping in mobile chat bubbles.
-4. **Instant Generation**: Run the included Python generator:
-   ```bash
-   pip install pillow
-   python templates/web-security/generate_og_banner.template.py
-   ```
-   *(Outputs an optimized `og-image.png` at ~20-50 KB with a high-contrast dark gradient, title, and badge pill).*
+The agent will follow the step-by-step conditional logic in **[`AGENT_RECIPES.md`](AGENT_RECIPES.md)** to configure only what is required without introducing unnecessary overhead.
 
 ---
 
-## 🚀 How to Apply to Another Website
+## 📁 Repository Directory Structure
 
-### 1. Configure `robots.txt`
-1. Copy `robots.template.txt` to your website's public web root as `robots.txt`.
-2. Replace `https://example.com/sitemap.xml` with your actual domain's sitemap URL.
-3. Adjust the `Disallow: /downloads/` paths to match your site's heavy asset or protected folders.
-
-### 2. Configure HTTP Security Headers
-
-Pick the configuration file corresponding to your hosting provider:
-
-* **Firebase Hosting**: Use `firebase.template.json`. Copy the `"headers"` array into your `firebase.json`.
-* **Cloudflare Pages / Netlify**: Copy `_headers.template` into your publish root as `_headers`.
-* **Nginx**: Include `security-headers.nginx.conf` inside your `server { ... }` block (`include /path/to/security-headers.nginx.conf;`) and reload Nginx (`sudo nginx -s reload`).
-* **Apache**: Copy the contents of `.htaccess.template` into your root `.htaccess` file.
-
-### 3. Customize Content Security Policy (CSP)
-In the CSP header string:
-- If your website uses Google Tag Manager / Analytics, keep `https://www.googletagmanager.com` and `https://*.google-analytics.com`.
-- If your website loads external fonts (e.g. Google Fonts), add `font-src 'self' https://fonts.gstatic.com;` and `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;`.
-- If you use Stripe or payment gateways, add `https://js.stripe.com` to `script-src` and `frame-src`.
+```
+web-security-templates/
+├── AGENT_RECIPES.md                   # 🤖 Master conditional switch-case playbook for AI agents
+├── README.md                          # 📖 Main documentation & usage guide
+│
+├── hosting/                           # 🌐 Hosting provider security headers
+│   ├── firebase.template.json         # Firebase Hosting (headers array, HSTS, CSP, cache)
+│   ├── vercel.template.json           # Vercel (vercel.json headers & cleanUrls)
+│   ├── render.template.yaml           # Render static site blueprint (render.yaml)
+│   ├── _headers.template              # Universal _headers for Cloudflare Pages & Netlify
+│   ├── security-headers.nginx.conf    # Nginx drop-in server block include
+│   └── .htaccess.template             # Apache HTTP Server drop-in configuration
+│
+├── github-security/                   # 🔒 GitHub repository hardening & CI/CD
+│   ├── github-security-checklist.md   # Step-by-step checklist (Public vs. Private repos)
+│   ├── dependabot.template.yml        # Universal Dependabot configuration (pip, npm, gradle, actions)
+│   ├── codeql-advanced.template.yml   # Custom CodeQL workflow for monorepos & compiled languages
+│   └── SECURITY.template.md           # Responsible vulnerability disclosure policy
+│
+├── pagespeed-and-performance/         # ⚡ 100/100 Core Web Vitals & CSP Evaluator
+│   ├── pagespeed-checklist.md         # Preconnects, CLS=0, critical CSS, WebP & caching
+│   └── csp-evaluator-guide.md         # Passing Google CSP Evaluator with zero high-severity warnings
+│
+├── client-features/                   # 💻 Modular client-side scripts & manifests
+│   ├── device-detection.template.js   # Zero-dependency OS detector (Windows, Android, macOS, iOS, Linux)
+│   └── manifest.template.json         # Universal Progressive Web App (PWA) manifest
+│
+└── social-and-crawlers/               # 🕷️ Crawler defense & social sharing
+    ├── robots.template.txt            # Hardened robots.txt (allows search bots, blocks AI scrapers)
+    ├── html-head-meta.template.html   # SEO, OpenGraph, Twitter Cards & PWA head tags
+    ├── opengraph-banner-requirements.template.md # 1200x630, <300 KB WhatsApp rule & safe zones
+    └── generate_og_banner.template.py # 1-click Python PIL script to generate dark-gradient banners
+```
 
 ---
 
-## 🔍 How to Test & Verify
+## 🔀 Decision Matrix Overview
 
-Once deployed on your other website, you can verify your score using these free industry testing tools:
+| Project Requirement | Condition | Template / Action to Apply |
+| :--- | :--- | :--- |
+| **Hosting: Firebase** | Target deploys to Firebase | Copy or merge `hosting/firebase.template.json` |
+| **Hosting: Vercel** | Target deploys to Vercel | Copy or merge `hosting/vercel.template.json` |
+| **Hosting: Render** | Target deploys to Render | Use `hosting/render.template.yaml` |
+| **Hosting: Cloudflare / Netlify** | Target uses static edge pages | Copy `hosting/_headers.template` to publish root as `_headers` |
+| **Hosting: Nginx / Apache** | Traditional web server | Include `hosting/security-headers.nginx.conf` or `hosting/.htaccess.template` |
+| **Custom Paid Domain** | Bought apex/subdomain | Enable `includeSubDomains; preload` in HSTS, canonical link, domain restrictions in GA4 |
+| **Google Analytics (GA4)** | Analytics enabled | Whitelist GTM in CSP (`script-src`, `connect-src`), add DNS prefetch & preconnect |
+| **Google Fonts** | External web fonts | Whitelist in CSP (`style-src`, `font-src`), add preconnect to Google Fonts |
+| **Heavy Binaries (> 10 MB)** | Distributing software | **Never host on free hosting storage**; route to GitHub Releases CDN + `X-Robots-Tag: noindex` |
+| **OS / Device Detection** | Multiplatform app downloads | Drop in `client-features/device-detection.template.js` |
+| **PWA Web App** | Installable mobile/desktop web app | Drop in `client-features/manifest.template.json` |
+| **GitHub: Public Repo** | Releasing code publicly | Enable Secret Scanning, Push Protection, Private Vulnerability Reporting, Fork Actions guard |
+| **Dependabot Updates** | Automated dependency bumps | Deploy `github-security/dependabot.template.yml` + **create labels first** (`gh label create ...`) |
+| **CodeQL Code Scanning** | Monorepo / Multi-language | Restrict Default Setup to interpreted languages (`actions`, `python`), add `permissions: contents: read` |
+| **PageSpeed 100/100** | Core Web Vitals optimization | Apply `pagespeed-and-performance/pagespeed-checklist.md` (CLS=0, preconnect, defer JS) |
+| **Open Graph Banners** | Social media link previews | Follow `< 300 KB` rule (WhatsApp) or run `social-and-crawlers/generate_og_banner.template.py` |
 
-1. **Social Share Preview & Debugger**:
-   - Test at [https://www.opengraph.xyz](https://www.opengraph.xyz) or [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
-2. **Security Headers Grade (Target: A+)**:
-   - Test at [https://securityheaders.com](https://securityheaders.com)
-3. **CSP Evaluation**:
-   - Test at Google CSP Evaluator: [https://csp-evaluator.withgoogle.com](https://csp-evaluator.withgoogle.com)
-4. **Robots.txt & Sitemap Inspection**:
-   - Test in Google Search Console -> Settings -> Robots.txt.
+---
+
+## 🔍 Testing & Verification Tools
+
+Once deployed, verify your configurations with these free industry audit tools:
+
+1. **Security Headers Grade (Target: A+)**: [https://securityheaders.com](https://securityheaders.com)
+2. **Google CSP Evaluator (Target: Clean)**: [https://csp-evaluator.withgoogle.com](https://csp-evaluator.withgoogle.com)
+3. **Google PageSpeed Insights (Target: 95–100)**: [https://pagespeed.web.dev/](https://pagespeed.web.dev/)
+4. **Social Sharing Debugger**: [https://www.opengraph.xyz](https://www.opengraph.xyz)
+5. **HSTS Preload Verification**: [https://hstspreload.org](https://hstspreload.org)

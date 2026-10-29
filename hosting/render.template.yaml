@@ -1,0 +1,40 @@
+# ==============================================================================
+# RENDER STATIC SITE BLUEPRINT TEMPLATE (render.yaml)
+# ==============================================================================
+services:
+  - type: web
+    name: static-web-app
+    env: static
+    buildCommand: "" # e.g. npm run build if using a build framework, or empty for static HTML
+    staticPublishPath: ./public # Adjust to your build output directory
+    headers:
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains; preload
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=(), payment=(), usb=(), display-capture=()
+      - path: /*
+        name: Content-Security-Policy
+        value: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://api.qrserver.com https://www.google-analytics.com https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://*.googletagmanager.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+      - path: /downloads/*
+        name: Cache-Control
+        value: public, max-age=86400
+      - path: /downloads/*
+        name: X-Robots-Tag
+        value: noindex, nofollow, noarchive, nosnippet
+      - path: /downloads/*
+        name: Content-Disposition
+        value: attachment
