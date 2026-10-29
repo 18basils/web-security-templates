@@ -7,18 +7,21 @@
 [![PageSpeed](https://img.shields.io/badge/PageSpeed-95--100%20Target-orange)](https://pagespeed.web.dev/)
 [![Propose an Idea](https://img.shields.io/badge/ideas-propose%20a%20recipe-blueviolet)](https://github.com/18basils/web-security-templates/issues/new/choose)
 [![Security Policy](https://img.shields.io/badge/security-SECURITY.md-blue)](SECURITY.md)
-[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE.md)
+[![License](https://img.shields.io/badge/license-terms-lightgrey)](LICENSE.md)
 
-A modular, production-grade security, optimization, and automation blueprint repository. Designed as an **Agent Execution Playbook** so developers and AI coding agents can parse conditional "Switch Cases" to patch security headers, bot defense policies, repository security, PageSpeed optimizations, and Open Graph cards into any project in seconds.
+A modular, production-grade security, optimization, and automation blueprint repository. Designed as an **Agent Execution Playbook** so developers and AI coding agents can parse conditional "Switch Cases" to patch security headers, bot defense policies, repository security, PageSpeed optimizations, Open Graph cards, and live `.md` / GitHub `About` metadata synchronization into any project in one command—**without ever overriding or breaking the target product's intended purpose**.
 
 ---
 
 ## 🤖 The AI Agent Playbook (`AGENT_RECIPES.md`)
 
 When working with an AI coding assistant, simply tell the agent:
-> *"Read `AGENT_RECIPES.md` from `web-security-templates` and patch my website for [Hosting: Firebase/Vercel/Render, Analytics: Enabled, OS Detection: Yes, Repo: Public/Private]."*
+> *"Read `AGENT_RECIPES.md` from `18basils/web-security-templates` and parse & patch my project in one go."*
 
-The agent will follow the step-by-step conditional logic in **[`AGENT_RECIPES.md`](AGENT_RECIPES.md)** to configure only what is required without introducing unnecessary overhead.
+The agent will follow **[`AGENT_RECIPES.md`](AGENT_RECIPES.md)** to:
+1. **Preserve Product Intent (Golden Rule 0)**: Inspect your app's features, APIs, and branding first so security headers and CSP rules adapt to your product without breaking anything.
+2. **Apply Conditional Switch-Cases (CASES 1–10)**: Configure only the hosting headers, crawler defenses, GitHub security settings, PageSpeed optimizations, and UI components your project actually needs.
+3. **Auto-Sync `.md` Files & GitHub `About`/Topics (CASE 11)**: Automatically detect changes from your latest commits and live website to update `README.md`, `CHANGELOG.md`, and your GitHub repository's `About` description, live URL, and topic tags without manual intervention.
 
 ---
 
@@ -30,7 +33,7 @@ web-security-templates/
 ├── README.md                          # 📖 Main documentation & usage guide
 ├── CONTRIBUTING.md                    # 💡 Idea-only contribution guide & credit system
 ├── SECURITY.md                        # 🔒 Vulnerability disclosure policy
-├── LICENSE.md                         # ⚖️ MIT License
+├── LICENSE.md                         # ⚖️ Copyright & license terms
 │
 ├── hosting/                           # 🌐 Hosting provider security headers & caching
 │   ├── firebase.template.json         # Firebase Hosting (headers array, HSTS, CSP, SPA rewrites, cache)
@@ -80,6 +83,7 @@ web-security-templates/
 
 | Project Requirement | Condition | Template / Action to Apply |
 | :--- | :--- | :--- |
+| **Product Intent Protection** | **Always (Golden Rule 0)** | **Never override or break product features/purpose**; adapt CSP & headers to the app |
 | **Hosting: Firebase** | Target deploys to Firebase | Copy or merge `hosting/firebase.template.json` (includes SPA rewrites & cache headers) |
 | **Hosting: Vercel** | Target deploys to Vercel | Copy or merge `hosting/vercel.template.json` |
 | **Hosting: Render** | Target deploys to Render | Use `hosting/render.template.yaml` |
@@ -101,6 +105,7 @@ web-security-templates/
 | **Repo Documentation** | Setting up clean docs | Deploy `github-boilerplate/` (`README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, Issue templates) |
 | **Tab Views (Markdown)** | Multi-platform README docs | Use `<details><summary>` accordion tabs from `github-boilerplate/markdown-tab-cheatsheet.md` |
 | **Tab Views (Web UI)** | Interactive web platform/code tabs | Use accessible WAI-ARIA component from `client-features/tab-view.template.html` |
+| **Auto-Sync `.md` & GitHub `About`** | **Always (CASE 11)** | Detect drift from commits/live site and auto-update `*.md`, GitHub `About` description, URL, and `topics` |
 
 ---
 

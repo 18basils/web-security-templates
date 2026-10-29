@@ -1,12 +1,26 @@
 # 🤖 AI Agent Execution Playbook: Conditional Web & Repo Patching
 
-This document is the **Master Decision Matrix** for AI coding agents. When instructed to audit, secure, or patch a web project, evaluate the target project against the following conditional cases ("Switch Cases") and apply the corresponding templates and configurations.
+This document is the **Master Decision Matrix** for AI coding agents. When instructed to audit, secure, or patch a web project, evaluate the target project against the following conditional cases ("Switch Cases") and apply the corresponding templates and configurations in **one complete, autonomous pass**.
+
+---
+
+## 🛡️ GOLDEN RULE 0: Product Intent Preservation & Zero-Touch Execution
+
+Before applying any template or configuration from this repository, the AI agent **MUST** enforce these two foundational rules:
+
+1. **Never Override or Deny the Product's Intended Purpose**:
+   * Every security header, Content Security Policy (CSP), Service Worker, crawler rule, and `.md` documentation update **must adapt to serve the target product's actual functionality, features, UI design, and business logic**—never restrict, break, or overwrite them.
+   * Before locking down CSP (`script-src`, `connect-src`, `img-src`, `frame-src`, `worker-src`) or `Permissions-Policy` (e.g., if the target app legitimately uses the camera, microphone, WebGL, audio, or external APIs), **inspect the target codebase first** and automatically whitelist every API, SDK, hardware permission, and asset origin the product relies on.
+   * When updating `README.md` or other `.md` files, **preserve the product's core identity, branding, screenshots, and custom sections**—enhance and synchronize them rather than replacing them with generic filler.
+2. **One-Command Autonomous Execution (Zero Manual Intervention)**:
+   * When a user instructs the agent to *"parse and patch"* their project with `web-security-templates`, automatically inspect the codebase, git commit history, and live website URL, apply all matching switch-cases (CASES 1–11), update `.md` files, and sync the GitHub `About` description, live URL, and topic tags via `gh api` in one go.
 
 ---
 
 ## 🔀 Decision Matrix Index
 
-* [Standardized Placeholder Tokens](#-standardized-placeholder-tokens)
+* [GOLDEN RULE 0: Product Intent Preservation & Zero-Touch Execution](#️-golden-rule-0-product-intent-preservation--zero-touch-execution)
+* [Standardized Placeholder Tokens](#️-standardized-placeholder-tokens)
 * [CASE 1: Hosting Platform Configuration](#case-1-hosting-platform-configuration)
 * [CASE 2: Domain Type (Custom Domain vs. Free Subdomain)](#case-2-domain-type-custom-domain-vs-free-subdomain)
 * [CASE 3: Third-Party Integrations & CSP Matrix](#case-3-third-party-integrations--csp-matrix)
@@ -17,6 +31,7 @@ This document is the **Master Decision Matrix** for AI coding agents. When instr
 * [CASE 8: Open Graph (OG) & Social Sharing](#case-8-open-graph-og--social-sharing)
 * [CASE 9: GitHub Repository Documentation & Boilerplate](#case-9-github-repository-documentation--boilerplate)
 * [CASE 10: Tab Views & Multi-Platform Switchers](#case-10-tab-views--multi-platform-switchers)
+* [CASE 11: Automated `.md` Docs, Live Website & GitHub `About`/Topics Sync](#case-11-automated-md-docs-live-website--github-abouttopics-sync)
 
 ---
 
@@ -102,7 +117,7 @@ ELSE IF target.usesFreeSubdomain (e.g. *.web.app, *.vercel.app, *.onrender.com):
 
 ## CASE 3: Third-Party Integrations & CSP Matrix
 
-Evaluate required third-party services and patch the `Content-Security-Policy` header:
+Evaluate required third-party services and hardware APIs in the target project and patch the `Content-Security-Policy` and `Permissions-Policy` headers without breaking any app feature:
 
 ### 3.1 Clean Baseline CSP (Default in All 6 Hosting Templates — Zero Evaluator Warnings):
 ```text
@@ -285,7 +300,7 @@ IF target.needsDocumentationBoilerplate == true:
 ```
 
 1. **Deploy Repository Boilerplate**:
-   * Copy `github-boilerplate/README.template.md` to project root as `README.md`.
+   * Copy `github-boilerplate/README.template.md` to project root as `README.md` (or merge badge/tab sections into existing `README.md` without losing project-specific documentation).
    * Copy `github-boilerplate/CONTRIBUTING.template.md` to project root as `CONTRIBUTING.md`.
    * Copy `github-boilerplate/PULL_REQUEST_TEMPLATE.template.md` to `.github/PULL_REQUEST_TEMPLATE.md`.
    * Copy `github-boilerplate/CHANGELOG.template.md` to project root as `CHANGELOG.md`.
@@ -316,3 +331,40 @@ SWITCH (target.tabContext):
   * Buttons: `role="tab"`, `aria-selected="true|false"`, `aria-controls="panel-id"`
   * Content: `role="tabpanel"`, `aria-labelledby="tab-id"`, `.tab-panel.active`
   * Provides seamless keyboard navigation (`ArrowLeft`, `ArrowRight`, `Home`, `End`) and dark glassmorphic styling.
+
+---
+
+## CASE 11: Automated `.md` Docs, Live Website & GitHub `About`/Topics Sync
+
+```text
+ALWAYS EXECUTE AT THE END OF EVERY PATCH / AUDIT PASS:
+```
+
+Whenever an AI agent runs this playbook on a target project (or after new commits/deployments are pushed), it **MUST automatically detect drift** between the latest codebase/live website and the repository's documentation & GitHub metadata, and synchronize them in one go without manual user intervention:
+
+1. **Inspect Latest Commits, Codebase & Live Website**:
+   * Check `git log -n 10 --oneline`, `package.json` / build configs, and hosting configuration (`firebase.json`, `vercel.json`, `render.yaml`) to identify the live production URL, current version, tech stack, and newly added features.
+   * If a live deployment URL exists, inspect its `<head>` meta tags, title, and visible features to verify what is currently live.
+2. **Synchronize All Markdown Documentation (`*.md`)**:
+   * **`README.md`**: Update status badges, live portal links, feature bullets, directory structure trees, and platform installation tabs so they accurately reflect the latest codebase and live website—**while strictly preserving the product's core purpose, branding, and custom content (Golden Rule 0)**.
+   * **`CHANGELOG.md`**: Append any undocumented recent commits, security hardenings, or release milestones under the current version or `[Unreleased]`.
+   * **`SECURITY.md` & `CONTRIBUTING.md`**: Verify all `:owner/:repo` links match the target repository.
+3. **Synchronize GitHub `About` Description, Website URL & Topic Tags via `gh api`**:
+   * Query current repo metadata:
+     ```bash
+     gh api /repos/:owner/:repo --jq '{description: .description, homepage: .homepage, topics: .topics}'
+     ```
+   * If the `description` is empty/outdated, `homepage` is missing the live website URL, or `topics` do not reflect the current stack and features, automatically update them in one command:
+     ```bash
+     # 1. Update About Description & Live Website URL (homepage)
+     gh api -X PATCH /repos/:owner/:repo \
+       -f description="Concise, up-to-date summary of the product and its key capabilities (<350 chars)." \
+       -f homepage="https://your-live-domain.com"
+
+     # 2. Update Repository Topic Tags (lowercase, hyphenated)
+     gh api -X PUT /repos/:owner/:repo/topics \
+       -f "names[]=topic-1" \
+       -f "names[]=topic-2" \
+       -f "names[]=topic-3" \
+       -f "names[]=topic-4"
+     ```
