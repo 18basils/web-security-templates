@@ -1,0 +1,43 @@
+name: "🐛 Report a Template Bug / Header Issue"
+description: "Report a syntax error, CSP false positive, or broken configuration in an existing template"
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for helping keep our security templates accurate! Let us know which template needs a fix and **`@18basils`** will patch it and credit your report."
+
+  - type: input
+    id: template_file
+    attributes:
+      label: "Affected Template File"
+      description: "Which file in the repository has the issue?"
+      placeholder: "e.g., hosting/security-headers.nginx.conf or client-features/sw.template.js"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "What is the issue?"
+      description: "Describe what happens, what fails, or what warning is triggered."
+      placeholder: "When testing on SecurityHeaders.com / CSP Evaluator..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested_fix
+    attributes:
+      label: "Suggested Fix or Reference (Optional)"
+      description: "If you know the fix or official documentation link, share it here."
+    validations:
+      required: false
+
+  - type: input
+    id: credit
+    attributes:
+      label: "🏆 Credit Handle (Optional)"
+      description: "How would you like to be credited in README.md once the fix is applied?"
+      placeholder: "@your-github-username"
+    validations:
+      required: false

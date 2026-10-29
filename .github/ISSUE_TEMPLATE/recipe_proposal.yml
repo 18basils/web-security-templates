@@ -1,0 +1,55 @@
+name: "💡 Propose a New Template / Security Recipe"
+description: "Suggest a new security header template, CSP rule, bot defense policy, or AI agent recipe (Maintainer-implemented with full credit)"
+title: "[Proposal]: "
+labels: ["proposal", "template-recipe"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 💡 Share Your Idea — We Build It, You Get Credited!
+        This repository uses an **Idea-Only Contribution Model**. Share your suggestion below—if approved, **`@18basils`** will implement, test, and integrate it into the blueprint suite and credit you in `README.md`!
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: "Recipe / Template Category"
+      description: "Which area of the blueprint suite does your idea belong to?"
+      options:
+        - "🌐 Hosting Provider Security Headers (Firebase, Vercel, Nginx, Cloudflare, etc.)"
+        - "🛡️ Content Security Policy (CSP) Third-Party Recipe"
+        - "🕷️ Bot Defense & AI Crawler Policy (robots.txt)"
+        - "🔒 GitHub Repository Hardening & CI/CD (CodeQL, Dependabot, Actions)"
+        - "⚡ PageSpeed & Core Web Vitals Optimization"
+        - "💻 Client-Side Feature / PWA / Accessible UI Component"
+        - "🎨 Open Graph / Social Preview Cards / SEO Meta"
+        - "🤖 AI Agent Playbook Switch-Case (AGENT_RECIPES.md)"
+        - "📑 GitHub Documentation Boilerplate"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem or Use Case"
+      description: "What security risk, performance bottleneck, or developer workflow does this idea solve?"
+      placeholder: "e.g., When embedding Cloudflare Turnstile CAPTCHA, strict CSP blocks the challenge iframe unless..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_idea
+    attributes:
+      label: "Proposed Idea, Specification, or Draft Snippet (Optional)"
+      description: "Describe how you envision it working, or paste any reference headers/links/snippets."
+      placeholder: "e.g., Add a Turnstile switch-case to CASE 3 in AGENT_RECIPES.md with script-src and frame-src https://challenges.cloudflare.com"
+    validations:
+      required: false
+
+  - type: input
+    id: credit
+    attributes:
+      label: "🏆 Credit Handle (For README Hall of Fame)"
+      description: "If your idea is approved and implemented by @18basils, how would you like to be credited in README.md?"
+      placeholder: "@your-github-username (or Name / Website)"
+    validations:
+      required: false

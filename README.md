@@ -1,9 +1,13 @@
 # 🛡️ Web Security, Bot Defense & Automation Blueprint Suite
 
 [![GitHub Template](https://img.shields.io/badge/template-modular%20recipes-blue?logo=github)](AGENT_RECIPES.md)
+[![CodeQL](https://github.com/18basils/web-security-templates/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/18basils/web-security-templates/actions/workflows/github-code-scanning/codeql)
 [![Security Grade](https://img.shields.io/badge/security%20headers-A%2B%20Target-brightgreen)](https://securityheaders.com)
 [![CSP Evaluator](https://img.shields.io/badge/CSP-Google%20Evaluator%20Clean-cyan)](https://csp-evaluator.withgoogle.com)
 [![PageSpeed](https://img.shields.io/badge/PageSpeed-95--100%20Target-orange)](https://pagespeed.web.dev/)
+[![Propose an Idea](https://img.shields.io/badge/ideas-propose%20a%20recipe-blueviolet)](https://github.com/18basils/web-security-templates/issues/new/choose)
+[![Security Policy](https://img.shields.io/badge/security-SECURITY.md-blue)](SECURITY.md)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE.md)
 
 A modular, production-grade security, optimization, and automation blueprint repository. Designed as an **Agent Execution Playbook** so developers and AI coding agents can parse conditional "Switch Cases" to patch security headers, bot defense policies, repository security, PageSpeed optimizations, and Open Graph cards into any project in seconds.
 
@@ -24,6 +28,9 @@ The agent will follow the step-by-step conditional logic in **[`AGENT_RECIPES.md
 web-security-templates/
 ├── AGENT_RECIPES.md                   # 🤖 Master conditional switch-case playbook for AI agents
 ├── README.md                          # 📖 Main documentation & usage guide
+├── CONTRIBUTING.md                    # 💡 Idea-only contribution guide & credit system
+├── SECURITY.md                        # 🔒 Vulnerability disclosure policy
+├── LICENSE.md                         # ⚖️ MIT License
 │
 ├── hosting/                           # 🌐 Hosting provider security headers & caching
 │   ├── firebase.template.json         # Firebase Hosting (headers array, HSTS, CSP, SPA rewrites, cache)
@@ -38,7 +45,7 @@ web-security-templates/
 │   ├── github-security-checklist.md   # Step-by-step checklist (CWE-275, CWE-338 randomness, rulesets)
 │   ├── dependabot.template.yml        # Universal Dependabot configuration (npm, pip, gradle, actions)
 │   ├── codeql-advanced.template.yml   # Custom SHA-pinned CodeQL workflow for monorepos & compiled languages
-│   └── SECURITY.template.md           # Responsible vulnerability disclosure policy
+│   └── SECURITY.template.md           # Responsible vulnerability disclosure policy template
 │
 ├── github-boilerplate/                # 📑 Complete Markdown & issue boilerplate
 │   ├── README.template.md             # Modern high-converting README with badge row & tabs
@@ -106,3 +113,20 @@ Once deployed, verify your configurations with these free industry audit tools:
 3. **Google PageSpeed Insights (Target: 95–100)**: [https://pagespeed.web.dev/](https://pagespeed.web.dev/)
 4. **Social Sharing Debugger**: [https://www.opengraph.xyz](https://www.opengraph.xyz)
 5. **HSTS Preload Verification**: [https://hstspreload.org](https://hstspreload.org)
+
+---
+
+## 💡 Have a New Idea? (Propose a Recipe & Get Credited!)
+
+To maintain strict security auditing across all blueprints, this repository uses an **Idea-Only Contribution Model** (we do not accept external Pull Requests directly).
+
+* **Suggest an Idea**: Open a **[💡 Propose a New Template / Security Recipe](https://github.com/18basils/web-security-templates/issues/new?template=recipe_proposal.yml)** issue describing a new hosting config, CSP rule, crawler policy, or optimization.
+* **Report a Bug**: Open a **[🐛 Report a Template Bug / Header Issue](https://github.com/18basils/web-security-templates/issues/new?template=template_bug.yml)** if you spot a false positive or syntax issue.
+* **Maintainer Implementation & Credits**: If your proposal is approved, **`@18basils`** will build, test, and integrate it into the suite and credit you in the **Community Idea Contributors** Hall of Fame below! See **[`CONTRIBUTING.md`](CONTRIBUTING.md)** for full details.
+
+### 🏆 Community Idea Contributors
+
+| Contributor | Credited Recipe / Improvement | Issue |
+| :--- | :--- | :--- |
+| **[@18basils](https://github.com/18basils)** | Creator & Maintainer of the Web Security Blueprint Suite | — |
+| *Your name here!* | *[Submit a Recipe Proposal](https://github.com/18basils/web-security-templates/issues/new?template=recipe_proposal.yml) to get featured!* | — |
