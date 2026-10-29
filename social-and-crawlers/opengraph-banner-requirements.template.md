@@ -1,6 +1,6 @@
 # 🎨 Open Graph (OG) Banner Requirements & Specification Template
 
-This template defines the exact industry-standard requirements, safe zone dimensions, platform behaviors, and meta tag configurations for creating social share banners (`og:image`) that render with 100% fidelity across **WhatsApp, Twitter / X, Facebook, LinkedIn, Slack, Discord, Telegram, and iMessage**.
+This template defines the exact industry-standard requirements, safe zone dimensions, live release verification checks, platform behaviors, and meta tag configurations for creating and maintaining social share banners (`og:image`) that render with 100% fidelity across **WhatsApp, Twitter / X, Facebook, LinkedIn, Slack, Discord, Telegram, and iMessage**.
 
 ---
 
@@ -20,7 +20,25 @@ This template defines the exact industry-standard requirements, safe zone dimens
 
 ---
 
-## 2. Safe Zone & Visual Composition
+## 2. Existing OG Banner Audit & Live Release Sync (Anti-Stale Preview Rule)
+
+Whenever auditing or patching a project where an Open Graph banner (`og-image.png`, `og-banner.jpg`, etc.) and `<meta property="og:...">` tags **already exist**, the AI agent **MUST NOT blindly skip them**. Instead, perform this mandatory 4-point verification against the **latest production / live release**:
+
+1. **Inspect the Existing Banner Image Visually**:
+   - View the existing `og:image` file (`public/assets/og-image.png`, `public/og-banner.jpg`, or the live `og:image` URL) and compare it against the current live application UI, version number, and feature set.
+   - Check if the image displays an outdated version badge (e.g., `v1.0` when the project is now on `v2.0`), old product name, deprecated tagline, or an obsolete UI screenshot/theme.
+2. **Verify Meta Tag Title & Description Parity (`<head>`)**:
+   - Compare `<meta property="og:title">`, `<meta property="og:description">`, `<meta name="twitter:title">`, `<meta name="twitter:description">`, and Schema.org JSON-LD against the latest live website features and `README.md`.
+   - If new platforms, capabilities, or branding changes were shipped in recent commits/releases, update the Open Graph and Twitter meta descriptions immediately.
+3. **Verify Technical Compliance of the Existing Image**:
+   - Confirm exact dimensions (`1200 x 630` px), file size (`< 300 KB`), and that `og:image` points to the live production absolute `https://` URL (never `localhost` or a staging domain).
+4. **Regenerate & Cache-Bust When Outdated**:
+   - If the existing OG banner image or its text/preview is behind the latest production release, regenerate the banner (via `generate_og_banner.template.py` or the project's custom banner generator) so its title, subtitle, feature tagline, and version pill reflect the **current live release**.
+   - Append or bump a version query parameter on the image URL in `<head>` (e.g., `https://example.com/assets/og-image.png?v=2.0.0`) so WhatsApp, Telegram, Discord, Twitter/X, and LinkedIn immediately fetch the updated banner instead of serving a cached older preview.
+
+---
+
+## 3. Safe Zone & Visual Composition
 
 Different platforms display cards in different ways: mobile chat bubbles crop edges, Twitter adds rounded corners, and Facebook overlays play buttons on videos.
 
@@ -59,7 +77,7 @@ Different platforms display cards in different ways: mobile chat bubbles crop ed
 
 ---
 
-## 3. Platform-by-Platform Card Behaviors
+## 4. Platform-by-Platform Card Behaviors
 
 | Platform | Card Type | Behavior & Gotchas |
 | :--- | :--- | :--- |
@@ -73,7 +91,7 @@ Different platforms display cards in different ways: mobile chat bubbles crop ed
 
 ---
 
-## 4. Complete HTML `<head>` Meta Tags Template
+## 5. Complete HTML `<head>` Meta Tags Template
 
 Place this block inside your `<head>` tag (see `social-and-crawlers/html-head-meta.template.html` for the full version):
 
@@ -108,7 +126,7 @@ Place this block inside your `<head>` tag (see `social-and-crawlers/html-head-me
 
 ---
 
-## 5. Free Testing & Validation Tools
+## 6. Free Testing & Validation Tools
 
 Test your live URL or preview card before publishing:
 

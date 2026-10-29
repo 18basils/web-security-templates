@@ -283,13 +283,19 @@ IF target.hasHeavyBinaries (> 10 MB, e.g. .zip, .exe, .apk, .dmg, .ipa):
 
 ## CASE 8: Open Graph (OG) & Social Sharing
 
-1. **Banner Requirements**:
+1. **Audit Existing OG Banner & Meta Tags Against Latest Live Release (If Present)**:
+   * If an Open Graph banner (`og-image.png`, `og-banner.jpg`, etc.) and `<meta property="og:...">` tags **already exist**, inspect the banner image visually and read the meta tags:
+     * Verify that the banner image's visual preview, title, subtitle, feature tagline, and version badge (`vX.Y.Z`) match the **latest production/live release** (not an older release or outdated UI).
+     * Verify that `og:title`, `og:description`, `twitter:title`, and `twitter:description` accurately describe the current live product and features.
+     * Verify dimensions (`1200 x 630` px), file size (`< 300 KB`), and absolute `https://` production URLs.
+     * If the existing banner or meta text is outdated, regenerate the banner and update the `<head>` meta tags (appending a cache-busting query string like `?v=X.Y.Z` to `og:image` and `twitter:image` so social platforms refresh their cached preview).
+2. **Banner Requirements (When Creating or Regenerating)**:
    * Exactly **`1200 x 630` px** (1.91:1 ratio).
    * **File size under 300 KB** (WhatsApp preview requirement - prefer high-quality JPEG at quality=85-88 for complex art, or compressed PNG).
    * Safe zone: 80 px left/right, 60 px top/bottom.
-2. **Instant Banner Creation**: Run `python social-and-crawlers/generate_og_banner.template.py`.
-3. **HTML Meta Tags**: Copy `social-and-crawlers/html-head-meta.template.html` into target `<head>`. (Includes `<link rel="image_src">` fallback and Schema.org JSON-LD).
-4. **Crawler Policy**: Copy `social-and-crawlers/robots.template.txt` to web root as `robots.txt`.
+3. **Instant Banner Creation**: Run `python social-and-crawlers/generate_og_banner.template.py` (or the project's custom OG generator script).
+4. **HTML Meta Tags**: Copy `social-and-crawlers/html-head-meta.template.html` into target `<head>`. (Includes `<link rel="image_src">` fallback and Schema.org JSON-LD).
+5. **Crawler Policy**: Copy `social-and-crawlers/robots.template.txt` to web root as `robots.txt`.
 
 ---
 
@@ -344,7 +350,8 @@ Whenever an AI agent runs this playbook on a target project (or after new commit
 
 1. **Inspect Latest Commits, Codebase & Live Website**:
    * Check `git log -n 10 --oneline`, `package.json` / build configs, and hosting configuration (`firebase.json`, `vercel.json`, `render.yaml`) to identify the live production URL, current version, tech stack, and newly added features.
-   * If a live deployment URL exists, inspect its `<head>` meta tags, title, and visible features to verify what is currently live.
+   * If a live deployment URL exists, inspect its `<head>` meta tags, title, Open Graph banner (`og:image`, `og:description`), and visible features to verify what is currently live.
+   * If an existing Open Graph banner or `<meta property="og:...">` description does not reflect the latest production release, regenerate the banner and update the meta tags (per CASE 8.1).
 2. **Synchronize All Markdown Documentation (`*.md`)**:
    * **`README.md`**: Update status badges, live portal links, feature bullets, directory structure trees, and platform installation tabs so they accurately reflect the latest codebase and live website—**while strictly preserving the product's core purpose, branding, and custom content (Golden Rule 0)**.
    * **`CHANGELOG.md`**: Append any undocumented recent commits, security hardenings, or release milestones under the current version or `[Unreleased]`.

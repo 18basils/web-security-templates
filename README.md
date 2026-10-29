@@ -100,7 +100,7 @@ web-security-templates/
 | **Dependabot Updates** | Automated dependency bumps | Deploy `github-security/dependabot.template.yml` + **create labels first** (`gh label create ...`) |
 | **CodeQL Code Scanning** | Monorepo / Multi-language | Restrict Default Setup to interpreted languages (`actions`, `python`, `javascript`), fix CWE-275 & CWE-338 |
 | **PageSpeed 100/100** | Core Web Vitals optimization | Apply `pagespeed-and-performance/pagespeed-checklist.md` + `vite.config.template.js` (manual chunks) |
-| **Open Graph Banners** | Social media link previews | Follow `< 300 KB` rule (WhatsApp) or run `social-and-crawlers/generate_og_banner.template.py` |
+| **Open Graph Banners** | Social media link previews | Verify existing `og:image`/description matches latest live release (`< 300 KB`), or run `generate_og_banner.template.py` |
 | **Proprietary Commercial License** | Closed-source / proprietary product | Deploy `github-boilerplate/LICENSE-PROPRIETARY.template.md` as `LICENSE.md` |
 | **Repo Documentation** | Setting up clean docs | Deploy `github-boilerplate/` (`README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, Issue templates) |
 | **Tab Views (Markdown)** | Multi-platform README docs | Use `<details><summary>` accordion tabs from `github-boilerplate/markdown-tab-cheatsheet.md` |
