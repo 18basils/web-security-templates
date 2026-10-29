@@ -14,6 +14,8 @@ This document is the **Master Decision Matrix** for AI coding agents. When instr
 * [CASE 6: GitHub Repository Security (Public vs. Private)](#case-6-github-repository-security-public-vs-private)
 * [CASE 7: PageSpeed & 100/100 Core Web Vitals](#case-7-pagespeed--100100-core-web-vitals)
 * [CASE 8: Open Graph (OG) & Social Sharing](#case-8-open-graph-og--social-sharing)
+* [CASE 9: GitHub Repository Documentation & Boilerplate](#case-9-github-repository-documentation--boilerplate)
+* [CASE 10: Tab Views & Multi-Platform Switchers](#case-10-tab-views--multi-platform-switchers)
 
 ---
 
@@ -221,3 +223,42 @@ IF target.hasHeavyBinaries (> 10 MB, e.g. .zip, .exe, .apk, .dmg, .ipa):
 2. **Instant Banner Creation**: Run `python social-and-crawlers/generate_og_banner.template.py`.
 3. **HTML Meta Tags**: Copy `social-and-crawlers/html-head-meta.template.html` into target `<head>`.
 4. **Crawler Policy**: Copy `social-and-crawlers/robots.template.txt` to web root as `robots.txt`.
+
+---
+
+## CASE 9: GitHub Repository Documentation & Boilerplate
+
+```text
+IF target.needsDocumentationBoilerplate == true:
+```
+
+1. **Deploy Repository Boilerplate**:
+   * Copy `github-boilerplate/README.template.md` to project root as `README.md`.
+   * Copy `github-boilerplate/CONTRIBUTING.template.md` to project root as `CONTRIBUTING.md`.
+   * Copy `github-boilerplate/PULL_REQUEST_TEMPLATE.template.md` to `.github/PULL_REQUEST_TEMPLATE.md`.
+   * Copy `github-boilerplate/CHANGELOG.template.md` to project root as `CHANGELOG.md`.
+2. **Deploy Issue Forms**:
+   * Copy `github-boilerplate/issue-templates/*.template.yml` into `.github/ISSUE_TEMPLATE/` (rename removing `.template`).
+   * This provides structured forms for Bug Reports, Feature Requests, and redirects security bugs to private advisories.
+
+---
+
+## CASE 10: Tab Views & Multi-Platform Switchers
+
+```text
+SWITCH (target.tabContext):
+```
+
+### 10.1 IF `tabContext == "markdown_readme"`:
+* Follow `github-boilerplate/markdown-tab-cheatsheet.md`.
+* Use native `<details><summary>` blocks with `<details open>` for the primary target (e.g. Windows) and collapsed `<details>` for other platforms (macOS, Linux, Mobile).
+* Use horizontal Markdown anchor pill tables `| [Windows](#windows) | [macOS](#macos) |` for quick navigation.
+
+### 10.2 IF `tabContext == "web_html"`:
+* Copy the CSS and JS tab logic from `client-features/tab-view.template.html`.
+* Follow the accessible WAI-ARIA pattern:
+  * Container: `[data-tab-group="group-name"]`
+  * Buttons: `role="tab"`, `aria-selected="true|false"`, `aria-controls="panel-id"`
+  * Content: `role="tabpanel"`, `aria-labelledby="tab-id"`, `.tab-panel.active`
+  * Provides seamless keyboard navigation (`ArrowLeft`, `ArrowRight`, `Home`, `End`) and dark glassmorphic styling.
+

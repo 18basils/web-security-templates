@@ -1,0 +1,45 @@
+name: "✨ Feature Request"
+description: "Suggest an idea or new capability for the project"
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: "Have an idea for a new feature? We'd love to hear it!"
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem or Need"
+      description: "Is your feature request related to a problem or missing workflow?"
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution"
+      description: "Describe what you want to happen and how it should look or work."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: target-platform
+    attributes:
+      label: "Target Platform"
+      options:
+        - "All Platforms"
+        - "Windows"
+        - "macOS"
+        - "Android"
+        - "iOS"
+        - "Web Portal"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternative Solutions"
+      description: "Describe any alternative solutions or features you've considered."

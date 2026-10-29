@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessible Web Tab View Component</title>
+  <style>
+    /* ==============================================================================
+     * MODERN DARK GLASSMORHPIC TAB VIEW COMPONENT
+     * ============================================================================== */
+    :root {
+      --bg-midnight: #080c15;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --cyan-neon: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    body {
+      background-color: var(--bg-midnight);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+    }
+
+    .tab-container {
+      width: 100%;
+      max-width: 680px;
+      margin-bottom: 48px;
+    }
+
+    .tab-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tab-header h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .tab-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Tab List Navigation */
+    .tab-list {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(30, 41, 59, 0.5);
+      padding: 6px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-subtle);
+      margin: 0 auto 20px;
+      width: fit-content;
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tab-list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn[aria-selected="true"] {
+      background: linear-gradient(135deg, #0284c7, var(--cyan-neon));
+      color: #080c15;
+      box-shadow: 0 4px 15px var(--cyan-glow);
+    }
+
+    .tab-btn:focus-visible {
+      outline: 2px solid var(--cyan-neon);
+      outline-offset: 2px;
+    }
+
+    /* Tab Panels */
+    .tab-panel {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 0.25s ease forwards;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Code block styling inside tabs */
+    pre {
+      background: #040711;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      margin: 12px 0 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==============================================================================
+   * EXAMPLE 1: OS / PLATFORM INSTALLATION TABS
+   * ============================================================================== -->
+  <div class="tab-container" data-tab-group="platform-tabs">
+    <div class="tab-header">
+      <h2>Install on Your Platform</h2>
+      <p>Select your operating system to view setup instructions</p>
+    </div>
+
+    <div class="tab-list" role="tablist" aria-label="Installation Platforms">
+      <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-windows" id="tab-windows" tabindex="0">
+        <span>💻 Windows</span>
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-macos" id="tab-macos" tabindex="-1">
+        <span>🍏 macOS</span>
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-linux" id="tab-linux" tabindex="-1">
+        <span>🐧 Linux</span>
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-mobile" id="tab-mobile" tabindex="-1">
+        <span>📱 Mobile</span>
+      </button>
+    </div>
+
+    <div id="panel-windows" class="tab-panel active" role="tabpanel" aria-labelledby="tab-windows">
+      <h3>Windows 10 / 11 Setup</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Runs as a standalone portable app or full user-space installer.</p>
+      <pre><code># Install via PowerShell or download Setup.exe
+winget install 18basils.DesktopCompanion</code></pre>
+    </div>
+
+    <div id="panel-macos" class="tab-panel" role="tabpanel" aria-labelledby="tab-macos">
+      <h3>Apple macOS Setup (Apple Silicon & Intel)</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Integrates directly into your Mac Menu Bar with floating desktop pet overlay.</p>
+      <pre><code># Mount the DMG and copy to Applications
+open Apple-Companion-macOS.dmg
+cp -R "/Volumes/Apple Companion/Apple Companion.app" /Applications/</code></pre>
+    </div>
+
+    <div id="panel-linux" class="tab-panel" role="tabpanel" aria-labelledby="tab-linux">
+      <h3>Linux AppImage Setup</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Zero-install single binary compatible with Ubuntu, Fedora, and Arch.</p>
+      <pre><code>chmod +x DesktopCompanion-x86_64.AppImage
+./DesktopCompanion-x86_64.AppImage</code></pre>
+    </div>
+
+    <div id="panel-mobile" class="tab-panel" role="tabpanel" aria-labelledby="tab-mobile">
+      <h3>Android & iOS Mobile Installation</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Point your phone camera at the screen QR code or install direct APK/TestFlight builds.</p>
+      <pre><code># Android direct install
+adb install Phone.Companion.apk</code></pre>
+    </div>
+  </div>
+
+  <!-- ==============================================================================
+   * JAVASCRIPT: ACCESSIBLE WAI-ARIA TAB CONTROLLER
+   * ============================================================================== -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Initialize all tab groups on the page
+      document.querySelectorAll("[data-tab-group]").forEach(initTabGroup);
+
+      function initTabGroup(container) {
+        const tabs = container.querySelectorAll('[role="tab"]');
+        const panels = container.querySelectorAll('[role="tabpanel"]');
+
+        tabs.forEach((tab, index) => {
+          // Click handler
+          tab.addEventListener("click", () => activateTab(tab, tabs, panels));
+
+          // Keyboard accessibility (ArrowLeft, ArrowRight, Home, End)
+          tab.addEventListener("keydown", (e) => {
+            let targetIndex = null;
+            if (e.key === "ArrowRight") {
+              targetIndex = (index + 1) % tabs.length;
+            } else if (e.key === "ArrowLeft") {
+              targetIndex = (index - 1 + tabs.length) % tabs.length;
+            } else if (e.key === "Home") {
+              targetIndex = 0;
+            } else if (e.key === "End") {
+              targetIndex = tabs.length - 1;
+            }
+
+            if (targetIndex !== null) {
+              e.preventDefault();
+              tabs[targetIndex].focus();
+              activateTab(tabs[targetIndex], tabs, panels);
+            }
+          });
+        });
+      }
+
+      function activateTab(activeTab, allTabs, allPanels) {
+        // Deactivate all tabs and hide panels
+        allTabs.forEach(t => {
+          t.setAttribute("aria-selected", "false");
+          t.setAttribute("tabindex", "-1");
+        });
+
+        allPanels.forEach(p => {
+          p.classList.remove("active");
+        });
+
+        // Activate selected tab and show target panel
+        activeTab.setAttribute("aria-selected", "true");
+        activeTab.setAttribute("tabindex", "0");
+
+        const targetPanelId = activeTab.getAttribute("aria-controls");
+        const targetPanel = document.getElementById(targetPanelId);
+        if (targetPanel) {
+          targetPanel.classList.add("active");
+        }
+      }
+    });
+  </script>
+</body>
+</html>

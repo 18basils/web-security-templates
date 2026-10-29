@@ -39,12 +39,21 @@ web-security-templates/
 │   ├── codeql-advanced.template.yml   # Custom CodeQL workflow for monorepos & compiled languages
 │   └── SECURITY.template.md           # Responsible vulnerability disclosure policy
 │
+├── github-boilerplate/                # 📑 Complete Markdown & issue boilerplate
+│   ├── README.template.md             # Modern high-converting README with badge row & tabs
+│   ├── CONTRIBUTING.template.md       # Code of conduct, coding standards, and PR process
+│   ├── PULL_REQUEST_TEMPLATE.template.md # Structured PR checklist (quality & security)
+│   ├── CHANGELOG.template.md          # Keep a Changelog format (Semantic Versioning 2.0.0)
+│   ├── markdown-tab-cheatsheet.md     # Native Markdown collapsible tab/accordion cheatsheet
+│   └── issue-templates/               # GitHub YAML issue forms (Bug report, Feature, Config)
+│
 ├── pagespeed-and-performance/         # ⚡ 100/100 Core Web Vitals & CSP Evaluator
 │   ├── pagespeed-checklist.md         # Preconnects, CLS=0, critical CSS, WebP & caching
 │   └── csp-evaluator-guide.md         # Passing Google CSP Evaluator with zero high-severity warnings
 │
 ├── client-features/                   # 💻 Modular client-side scripts & manifests
 │   ├── device-detection.template.js   # Zero-dependency OS detector (Windows, Android, macOS, iOS, Linux)
+│   ├── tab-view.template.html         # Accessible WAI-ARIA dark glassmorphic web tab component
 │   └── manifest.template.json         # Universal Progressive Web App (PWA) manifest
 │
 └── social-and-crawlers/               # 🕷️ Crawler defense & social sharing
@@ -76,6 +85,9 @@ web-security-templates/
 | **CodeQL Code Scanning** | Monorepo / Multi-language | Restrict Default Setup to interpreted languages (`actions`, `python`), add `permissions: contents: read` |
 | **PageSpeed 100/100** | Core Web Vitals optimization | Apply `pagespeed-and-performance/pagespeed-checklist.md` (CLS=0, preconnect, defer JS) |
 | **Open Graph Banners** | Social media link previews | Follow `< 300 KB` rule (WhatsApp) or run `social-and-crawlers/generate_og_banner.template.py` |
+| **Repo Documentation** | Setting up clean docs | Deploy `github-boilerplate/` (`README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, Issue templates) |
+| **Tab Views (Markdown)** | Multi-platform README docs | Use `<details><summary>` accordion tabs from `github-boilerplate/markdown-tab-cheatsheet.md` |
+| **Tab Views (Web UI)** | Interactive web platform/code tabs | Use accessible WAI-ARIA component from `client-features/tab-view.template.html` |
 
 ---
 
