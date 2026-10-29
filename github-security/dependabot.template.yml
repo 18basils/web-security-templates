@@ -42,7 +42,7 @@ updates:
 
   # 4. Android / Java / Kotlin (gradle) - Uncomment if Android is used
   # - package-ecosystem: "gradle"
-  #   directory: "/phone-companion"
+  #   directory: "/mobile-app"
   #   schedule:
   #     interval: "weekly"
   #   open-pull-requests-limit: 10

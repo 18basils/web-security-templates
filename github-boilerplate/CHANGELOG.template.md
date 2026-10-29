@@ -21,9 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Multi-Platform Universal Support**: Added native targets for Windows, Android, macOS, and iOS.
-- **Interactive Web Portal**: Deployed responsive web hub on Firebase Hosting with 3D isometric platform cards.
-- **On-Screen QR Hub**: Dual QR code switcher for instant mobile installation.
-- **Automated CI/CD**: Cloud builds for macOS DMG and iOS IPA via GitHub Actions.
+- **Interactive Web Portal**: Deployed responsive web portal with automatic device detection and PWA offline support.
+- **Automated CI/CD**: Cloud release builds via GitHub Actions.
 - **Automated Security**: Enabled CodeQL static analysis, Secret Scanning, and Dependabot version updates.
 
 ### Changed
@@ -31,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hardened Content Security Policy (CSP) and HSTS preloading.
 
 ### Fixed
-- Resolved non-exhaustive Swift switch statement in mascot model.
+- Resolved edge-case state synchronization bug during offline mode recovery.
 - Fixed Actions workflow permissions to enforce least-privilege token access (`contents: read`).
 
 ---
@@ -39,5 +38,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-10-15
 
 ### Added
-- Initial standalone release for Windows.
-- Basic hydration goal tracking and periodic desktop reminders.
+- Initial standalone release.
+- Core application architecture, local persistence, and configuration settings.

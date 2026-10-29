@@ -1,5 +1,5 @@
 # ==============================================================================
-# APACHE .htaccess SECURITY & ABUSE PREVENTION SNIPPET
+# APACHE 2.4+ .htaccess SECURITY & ABUSE PREVENTION SNIPPET
 # ==============================================================================
 
 <IfModule mod_headers.c>
@@ -12,35 +12,59 @@
   # 3. Anti-Clickjacking (No framing)
   Header always set X-Frame-Options "DENY"
 
-  # 4. XSS Protection
-  Header always set X-XSS-Protection "1; mode=block"
+  # 4. Disable Legacy XSS Auditor (OWASP / MDN recommendation when CSP is active)
+  Header always set X-XSS-Protection "0"
 
   # 5. Referrer Policy
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
-  # 6. Hardware Permissions Lockdown
+  # 6. Cross-Origin Window Isolation
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+
+  # 7. Hardware Permissions Lockdown
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), display-capture=()"
 
-  # 7. Content Security Policy
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.qrserver.com https://www.google-analytics.com https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://*.googletagmanager.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';"
+  # 8. Content Security Policy (Clean Baseline - extend via AGENT_RECIPES.md as needed)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests;"
 </IfModule>
 
-# 8. Web Manifest MIME Type
+# 9. Web Manifest & Service Worker MIME Types
 <IfModule mod_mime.c>
   AddType application/manifest+json .webmanifest
+  AddType application/javascript .js
 </IfModule>
 
-# 9. Downloads Folder Anti-Indexing & Direct Attachment
+# 10. Cache-Control Strategy (HTML, Service Worker, Immutable Assets & Downloads)
 <IfModule mod_headers.c>
-  <FilesMatch "\.(zip|exe|apk|dmg|tar\.gz)$">
+  # HTML Shell & Service Worker Cache Bypass
+  <FilesMatch "^(index\.html|sw\.js)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+
+  # Images & Vector Assets (1-week cache + stale-while-revalidate)
+  <FilesMatch "\.(jpg|jpeg|png|svg|webp|avif)$">
+    Header set Cache-Control "public, max-age=604800, stale-while-revalidate=86400"
+  </FilesMatch>
+
+  # Downloads Anti-Indexing & Direct Attachment
+  <FilesMatch "\.(zip|exe|apk|dmg|ipa|AppImage|tar\.gz)$">
     Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
     Header set Content-Disposition "attachment"
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
 </IfModule>
 
-# 10. Block Hidden Files & Dotfiles (.git, .env)
+# 11. Block Hidden Files & Dotfile Directories (.git/*, .env, .htaccess)
+<IfModule mod_alias.c>
+  RedirectMatch 404 /\..*
+</IfModule>
+
 <FilesMatch "^\.">
-  Order allow,deny
-  Deny from all
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
 </FilesMatch>

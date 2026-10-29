@@ -4,20 +4,28 @@
 // ==============================================================================
 
 const CACHE_NAME = 'app-shell-v1';
-const STATIC_ASSETS = [
+
+// Core navigation shell (must succeed for offline mode)
+const CORE_SHELL_ASSETS = [
   '/',
-  '/index.html',
-  '/site.webmanifest',
-  '/assets/favicon-32x32.png',
-  '/assets/apple-touch-icon.png',
-  '/assets/og-image.png'
+  '/index.html'
 ];
 
-// 1. Install Event: Pre-cache core application shell
+// Optional static assets (cached best-effort so missing icons never break SW install)
+const OPTIONAL_ASSETS = [
+  '/site.webmanifest',
+  '/assets/favicon-32x32.png',
+  '/assets/apple-touch-icon.png'
+];
+
+// 1. Install Event: Pre-cache core application shell + best-effort optional assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await cache.addAll(CORE_SHELL_ASSETS);
+      await Promise.allSettled(
+        OPTIONAL_ASSETS.map((url) => cache.add(url))
+      );
     }).then(() => self.skipWaiting())
   );
 });
@@ -33,32 +41,35 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Fetch Event: Network-First for HTML navigation, Stale-While-Revalidate for static assets
+// 3. Fetch Event: Same-Origin Only — Network-First for HTML, Stale-While-Revalidate for assets
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Skip non-GET requests or third-party analytics
-  if (
-    event.request.method !== 'GET' ||
-    url.origin.includes('google-analytics') ||
-    url.origin.includes('googletagmanager')
-  ) {
+  // Security & Cache Hygiene: Only intercept same-origin GET requests
+  if (event.request.method !== 'GET' || url.origin !== self.location.origin) {
     return;
   }
 
-  // Navigation requests: Network-First with Cache fallback (guarantees fresh content)
+  // Never cache the Service Worker script itself
+  if (url.pathname === '/sw.js') {
+    return;
+  }
+
+  // Navigation requests: Network-First with Cache fallback (guarantees fresh HTML releases)
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/index.html') || caches.match('/'))
+      fetch(event.request).catch(async () => {
+        return (await caches.match('/index.html')) || (await caches.match('/'));
+      })
     );
     return;
   }
 
-  // Static Assets, Images & Scripts: Stale-While-Revalidate strategy
+  // Same-origin Static Assets, Images & Scripts: Stale-While-Revalidate strategy
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseClone = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseClone);

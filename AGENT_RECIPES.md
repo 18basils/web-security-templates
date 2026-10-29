@@ -6,6 +6,7 @@ This document is the **Master Decision Matrix** for AI coding agents. When instr
 
 ## 🔀 Decision Matrix Index
 
+* [Standardized Placeholder Tokens](#-standardized-placeholder-tokens)
 * [CASE 1: Hosting Platform Configuration](#case-1-hosting-platform-configuration)
 * [CASE 2: Domain Type (Custom Domain vs. Free Subdomain)](#case-2-domain-type-custom-domain-vs-free-subdomain)
 * [CASE 3: Third-Party Integrations & CSP Matrix](#case-3-third-party-integrations--csp-matrix)
@@ -16,6 +17,23 @@ This document is the **Master Decision Matrix** for AI coding agents. When instr
 * [CASE 8: Open Graph (OG) & Social Sharing](#case-8-open-graph-og--social-sharing)
 * [CASE 9: GitHub Repository Documentation & Boilerplate](#case-9-github-repository-documentation--boilerplate)
 * [CASE 10: Tab Views & Multi-Platform Switchers](#case-10-tab-views--multi-platform-switchers)
+
+---
+
+## 🏷️ Standardized Placeholder Tokens
+
+When applying any template from this repository, replace all occurrences of these standardized tokens with the target project's real values:
+
+| Token | Target Value | Where Used |
+| :--- | :--- | :--- |
+| `:owner` | GitHub owner / organization name | Badges, `SECURITY.md`, `device-detection.template.js`, `security.template.txt` |
+| `:repo` | GitHub repository name | Badges, `SECURITY.md`, `CONTRIBUTING.md`, `issue-templates/config.template.yml` |
+| `:username` | Maintainer's GitHub username | `SECURITY.template.md`, `LICENSE-PROPRIETARY.template.md` |
+| `:project` | Package / Winget / Homebrew identifier | `README.template.md`, `tab-view.template.html`, `markdown-tab-cheatsheet.md` |
+| `https://example.com` | Production HTTPS URL (no trailing slash) | `html-head-meta.template.html`, `robots.template.txt`, `security.template.txt` |
+| `Your Brand` / `Your Website Title` | Brand and product title | `html-head-meta.template.html`, `manifest.template.json` |
+| `G-XXXXXXXXXX` | Google Analytics 4 Measurement ID | `AGENT_RECIPES.md` (when `features.googleAnalytics == true`) |
+| `[YEAR]` / `[AUTHOR / ENTITY NAME]` | Copyright year and legal entity | `LICENSE-PROPRIETARY.template.md` |
 
 ---
 
@@ -52,11 +70,16 @@ SWITCH (target.hostingPlatform):
    ```nginx
    include /etc/nginx/conf.d/security-headers.conf;
    ```
-3. Test and reload: `sudo nginx -t && sudo nginx -s reload`.
+3. Note: Every `location` block inside `security-headers.nginx.conf` that sets `Cache-Control` explicitly preserves all 8 core security headers (since Nginx drops server-level `add_header` directives whenever a child `location` defines `add_header`).
+4. Test and reload: `sudo nginx -t && sudo nginx -s reload`.
 
 ### 1.6 IF `hostingPlatform == "apache"`:
 1. Copy `hosting/.htaccess.template` into your document root as `.htaccess`.
-2. Ensure `mod_headers`, `mod_rewrite`, and `mod_mime` are enabled in Apache.
+2. Ensure `mod_headers`, `mod_alias`, `mod_authz_core`, and `mod_mime` are enabled in Apache 2.4+.
+
+### 1.7 Universal RFC 9116 Security Contact (`/.well-known/security.txt`):
+1. Copy `hosting/security.template.txt` into your web root at `.well-known/security.txt` (e.g. `public/.well-known/security.txt`).
+2. Replace `:owner`, `:repo`, and `https://example.com` with your production values.
 
 ---
 
@@ -81,13 +104,19 @@ ELSE IF target.usesFreeSubdomain (e.g. *.web.app, *.vercel.app, *.onrender.com):
 
 Evaluate required third-party services and patch the `Content-Security-Policy` header:
 
-### 3.1 Base Strict CSP (Always Include):
+### 3.1 Clean Baseline CSP (Default in All 6 Hosting Templates — Zero Evaluator Warnings):
 ```text
 default-src 'self';
+script-src 'self';
+style-src 'self' 'unsafe-inline';
+img-src 'self' data: blob:;
+font-src 'self';
+connect-src 'self';
 frame-ancestors 'none';
 base-uri 'self';
 form-action 'self';
 object-src 'none';
+upgrade-insecure-requests;
 ```
 
 ### 3.2 IF `features.googleAnalytics == true`:
@@ -98,9 +127,9 @@ object-src 'none';
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   ```
 * **CSP Header Additions**:
-  * `script-src`: add `https://www.googletagmanager.com`
-  * `img-src`: add `https://*.google-analytics.com https://*.googletagmanager.com`
-  * `connect-src`: add `https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com`
+  * `script-src`: add `https://www.googletagmanager.com` (plus `'sha256-...'` hash of your inline `gtag()` bootstrap script, or move `gtag()` init to an external `/js/analytics.js` file)
+  * `img-src`: add `https://www.google-analytics.com https://*.google-analytics.com https://*.googletagmanager.com`
+  * `connect-src`: add `https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com`
 
 ### 3.3 IF `features.googleFonts == true`:
 * **HTML `<head>`**:
@@ -115,14 +144,16 @@ object-src 'none';
 ### 3.4 IF `features.qrCodeGenerator == true` (e.g. qrserver) OR `clientExports == true`:
 * **CSP Header Additions**:
   * `img-src`: add `data: blob: https://api.qrserver.com`
+* **If exporting cross-origin images via `<canvas>`**:
+  * Add `Access-Control-Allow-Origin: *` only to the specific image asset route needed for canvas export.
 
 ### 3.5 IF `features.stripePayments == true`:
 * **CSP Header Additions**:
   * `script-src`: add `https://js.stripe.com`
   * `frame-src`: add `https://js.stripe.com`
 
-### 3.6 IF `features.strictCSPWithoutInline == true`:
-* Replace `'unsafe-inline'` in `script-src` with exact SHA-256 script hashes (`'sha256-...'`) or request nonces (`'nonce-...'`).
+### 3.6 IF `features.inlineScriptsNeeded == true`:
+* Prefer computing exact SHA-256 script hashes (`'sha256-...'`) or server nonces (`'nonce-...'`) over `'unsafe-inline'` so Google CSP Evaluator remains 100% green.
 
 ---
 
@@ -212,7 +243,7 @@ IF target.hasHeavyBinaries (> 10 MB, e.g. .zip, .exe, .apk, .dmg, .ipa):
      subprocess.run(['gh', 'api', '-X', 'PATCH', '/repos/:owner/:repo/code-scanning/default-setup', '--input', '-'], input=payload, text=True)
      "
      ```
-   * **CWE-275 least-privilege fix**: Ensure all `.github/workflows/*.yml` contain `permissions: contents: read`.
+   * **CWE-275 least-privilege & SHA Pinning**: Ensure all `.github/workflows/*.yml` contain `permissions: contents: read`, `persist-credentials: false`, and pin Actions to full 40-char commit SHAs.
    * **CWE-338 Insecure Randomness Prevention**: Replace `Math.random()` with `crypto.randomUUID()` for unique entity identifiers, or `window.crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1)` for floats.
 7. **Add Status Badges**: Add live badges to `README.md` header:
    ```markdown

@@ -12,7 +12,7 @@ body:
     attributes:
       label: "Describe the Bug"
       description: "A clear and concise description of what the bug is."
-      placeholder: "When clicking the hydration reminder button..."
+      placeholder: "When clicking the primary action button..."
     validations:
       required: true
 
@@ -26,6 +26,7 @@ body:
         - "Windows 10"
         - "macOS (Apple Silicon M-Series)"
         - "macOS (Intel)"
+        - "Linux"
         - "Android"
         - "iOS / iPadOS"
         - "Web Portal"
@@ -37,7 +38,7 @@ body:
     attributes:
       label: "Steps to Reproduce"
       description: "Exact steps to reproduce the issue."
-      placeholder: "1. Launch app\n2. Open settings\n3. Select avatar..."
+      placeholder: "1. Launch application\n2. Open settings panel\n3. Click Save..."
     validations:
       required: true
 

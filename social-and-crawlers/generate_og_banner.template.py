@@ -32,7 +32,7 @@ def generate_og_banner(
     width = 1200
     height = 630
 
-    # 1. Create base RGB image
+    # 1. Create base RGBA image
     img = Image.new("RGBA", (width, height), bg_color_top)
     draw = ImageDraw.Draw(img)
 
@@ -78,7 +78,10 @@ def generate_og_banner(
                 return ImageFont.truetype(name, size)
             except IOError:
                 continue
-        return ImageFont.load_default()
+        try:
+            return ImageFont.load_default(size=size)
+        except TypeError:
+            return ImageFont.load_default()
 
     font_title = get_font(52, bold=True)
     font_pill = get_font(13, bold=True)
@@ -97,8 +100,8 @@ def generate_og_banner(
         outline=(primary_color[0], primary_color[1], primary_color[2], 180),
         width=1
     )
-    # Center pill text
-    draw.text((width // 2, pill_y + 8), pill_text, fill=primary_color, font=font_pill, anchor="mm")
+    # Center pill text vertically and horizontally inside the pill badge
+    draw.text((width // 2, pill_y + pill_h // 2), pill_text, fill=primary_color, font=font_pill, anchor="mm")
 
     # 7. Draw Main Title (Bold, Center)
     title_y = 220

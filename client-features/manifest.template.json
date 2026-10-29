@@ -11,10 +11,10 @@
   "categories": ["productivity", "utilities"],
   "icons": [
     {
-      "src": "/assets/icon-180.png",
+      "src": "/assets/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/assets/icon-192.png",
@@ -29,10 +29,19 @@
       "purpose": "any"
     },
     {
+      "src": "/assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
       "src": "/assets/og-image.png",
       "sizes": "1200x630",
       "type": "image/png",
-      "purpose": "any"
+      "form_factor": "wide",
+      "label": "Application overview"
     }
   ]
 }

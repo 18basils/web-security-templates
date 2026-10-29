@@ -2,6 +2,11 @@
 # UNIVERSAL BOT DEFENSE & CRAWLER POLICY TEMPLATE
 # Replace https://example.com with your actual website domain
 # ==============================================================================
+# SECURITY NOTE:
+# Never list sensitive or hidden internal paths (e.g. /.git/, /.env, /admin/) in
+# robots.txt — malicious scanners ignore robots.txt and use Disallow lists for
+# reconnaissance. Block sensitive paths at the web server / edge level instead.
+# ==============================================================================
 
 # ------------------------------------------------------------------------------
 # 1. VERIFIED SEARCH ENGINES (Indexing & Discovery Allowed)
@@ -31,6 +36,8 @@ Disallow: /*.zip$
 Disallow: /*.exe$
 Disallow: /*.apk$
 Disallow: /*.dmg$
+Disallow: /*.ipa$
+Disallow: /*.AppImage$
 Disallow: /*.tar.gz$
 
 # ------------------------------------------------------------------------------
@@ -59,6 +66,8 @@ Disallow: /*.zip$
 Disallow: /*.exe$
 Disallow: /*.apk$
 Disallow: /*.dmg$
+Disallow: /*.ipa$
+Disallow: /*.AppImage$
 
 # ------------------------------------------------------------------------------
 # 3. COMMERCIAL SCRAPERS & AI DATASET HARVESTERS (Blocked - Abuse Prevention)
@@ -77,24 +86,24 @@ User-agent: Bytespider
 User-agent: CCBot
 User-agent: GPTBot
 User-agent: ChatGPT-User
+User-agent: OAI-SearchBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
 User-agent: anthropic-ai
 User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: PerplexityBot
+User-agent: Meta-ExternalAgent
+User-agent: FacebookBot
+User-agent: Amazonbot
 User-agent: cohere-ai
 User-agent: Omgilibot
+User-agent: YouBot
+User-agent: Diffbot
 Disallow: /
 
 # ------------------------------------------------------------------------------
-# 4. EXPLOIT SCANNERS & SECURITY PROBING TOOLS (Blocked)
-# ------------------------------------------------------------------------------
-User-agent: Nmap Scripting Engine
-User-agent: sqlmap
-User-agent: Havij
-User-agent: WPScan
-User-agent: masscan
-Disallow: /
-
-# ------------------------------------------------------------------------------
-# 5. GENERAL BOTS & DEFAULT CRAWLER POLICY (Strict Security & Rate-Control)
+# 4. GENERAL BOTS & DEFAULT CRAWLER POLICY (Bandwidth Protection)
 # ------------------------------------------------------------------------------
 User-agent: *
 Allow: /
@@ -107,27 +116,18 @@ Allow: /site.webmanifest
 Allow: /manifest.json
 Allow: /sitemap.xml
 
-# Bandwidth protection
+# Bandwidth protection against automated binary harvesting
 Disallow: /downloads/
 Disallow: /*.zip$
 Disallow: /*.exe$
 Disallow: /*.apk$
 Disallow: /*.dmg$
+Disallow: /*.ipa$
+Disallow: /*.AppImage$
 Disallow: /*.tar.gz$
 
-# Sensitive file and internal folder protection
-Disallow: /.git/
-Disallow: /.env
-Disallow: /.env.*
-Disallow: /admin/
-Disallow: /config/
-Disallow: /tmp/
-Disallow: /private/
-Disallow: /server/
-Disallow: /backup/
-
-# Request pacing to mitigate server abuse (seconds between requests)
-Crawl-delay: 10
+# Optional: Uncomment Crawl-delay if non-Google crawlers cause origin load spikes
+# Crawl-delay: 10
 
 # ------------------------------------------------------------------------------
 # SITEMAP LOCATION

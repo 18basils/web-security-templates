@@ -1,6 +1,6 @@
 # 🛡️ Web Security, Bot Defense & Automation Blueprint Suite
 
-[![GitHub Private/Template](https://img.shields.io/badge/template-modular%20recipes-blue?logo=github)](https://github.com/18basils/web-security-templates)
+[![GitHub Template](https://img.shields.io/badge/template-modular%20recipes-blue?logo=github)](AGENT_RECIPES.md)
 [![Security Grade](https://img.shields.io/badge/security%20headers-A%2B%20Target-brightgreen)](https://securityheaders.com)
 [![CSP Evaluator](https://img.shields.io/badge/CSP-Google%20Evaluator%20Clean-cyan)](https://csp-evaluator.withgoogle.com)
 [![PageSpeed](https://img.shields.io/badge/PageSpeed-95--100%20Target-orange)](https://pagespeed.web.dev/)
@@ -30,13 +30,14 @@ web-security-templates/
 │   ├── vercel.template.json           # Vercel (vercel.json headers, cleanUrls & cache controls)
 │   ├── render.template.yaml           # Render static site blueprint (render.yaml)
 │   ├── _headers.template              # Universal _headers for Cloudflare Pages & Netlify
-│   ├── security-headers.nginx.conf    # Nginx drop-in server block include
-│   └── .htaccess.template             # Apache HTTP Server drop-in configuration
+│   ├── security-headers.nginx.conf    # Nginx drop-in server block include (inheritance-safe)
+│   ├── .htaccess.template             # Apache 2.4+ HTTP Server drop-in configuration
+│   └── security.template.txt          # RFC 9116 /.well-known/security.txt vulnerability contact
 │
 ├── github-security/                   # 🔒 GitHub repository hardening & CI/CD
 │   ├── github-security-checklist.md   # Step-by-step checklist (CWE-275, CWE-338 randomness, rulesets)
 │   ├── dependabot.template.yml        # Universal Dependabot configuration (npm, pip, gradle, actions)
-│   ├── codeql-advanced.template.yml   # Custom CodeQL workflow for monorepos & compiled languages
+│   ├── codeql-advanced.template.yml   # Custom SHA-pinned CodeQL workflow for monorepos & compiled languages
 │   └── SECURITY.template.md           # Responsible vulnerability disclosure policy
 │
 ├── github-boilerplate/                # 📑 Complete Markdown & issue boilerplate
@@ -57,7 +58,7 @@ web-security-templates/
 │   ├── device-detection.template.js   # Zero-dependency OS detector (Windows, Android, macOS, iOS, Linux)
 │   ├── tab-view.template.html         # Accessible WAI-ARIA dark glassmorphic web tab component
 │   ├── manifest.template.json         # Universal Progressive Web App (PWA) manifest
-│   └── sw.template.js                 # Bulletproof PWA Service Worker (Stale-While-Revalidate + Cache Bypass)
+│   └── sw.template.js                 # Same-origin PWA Service Worker (Stale-While-Revalidate + Cache Bypass)
 │
 └── social-and-crawlers/               # 🕷️ Crawler defense & social sharing
     ├── robots.template.txt            # Hardened robots.txt (allows search bots & OG, blocks AI scrapers)
@@ -77,6 +78,7 @@ web-security-templates/
 | **Hosting: Render** | Target deploys to Render | Use `hosting/render.template.yaml` |
 | **Hosting: Cloudflare / Netlify** | Target uses static edge pages | Copy `hosting/_headers.template` to publish root as `_headers` |
 | **Hosting: Nginx / Apache** | Traditional web server | Include `hosting/security-headers.nginx.conf` or `hosting/.htaccess.template` |
+| **RFC 9116 Security Contact** | Any public web application | Copy `hosting/security.template.txt` to `/.well-known/security.txt` |
 | **Custom Paid Domain** | Bought apex/subdomain | Enable `includeSubDomains; preload` in HSTS, canonical link, domain restrictions in GA4 |
 | **Google Analytics (GA4)** | Analytics enabled | Whitelist GTM in CSP (`script-src`, `connect-src`), add DNS prefetch & preconnect |
 | **Google Fonts** | External web fonts | Whitelist in CSP (`style-src`, `font-src`), add preconnect to Google Fonts |
@@ -102,3 +104,5 @@ Once deployed, verify your configurations with these free industry audit tools:
 1. **Security Headers Grade (Target: A+)**: [https://securityheaders.com](https://securityheaders.com)
 2. **Google CSP Evaluator (Target: Clean)**: [https://csp-evaluator.withgoogle.com](https://csp-evaluator.withgoogle.com)
 3. **Google PageSpeed Insights (Target: 95–100)**: [https://pagespeed.web.dev/](https://pagespeed.web.dev/)
+4. **Social Sharing Debugger**: [https://www.opengraph.xyz](https://www.opengraph.xyz)
+5. **HSTS Preload Verification**: [https://hstspreload.org](https://hstspreload.org)

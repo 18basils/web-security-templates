@@ -39,6 +39,8 @@ Allows security researchers to report vulnerabilities privately without public e
   ```bash
   gh api -X PUT /repos/:owner/:repo/private-vulnerability-reporting -f enabled=true
   ```
+* **Deploy `/.well-known/security.txt` (RFC 9116)**:
+  Copy `hosting/security.template.txt` to `public/.well-known/security.txt` so automated security scanners and researchers can locate your reporting policy.
 
 ### 3. Dependabot Alerts & Version Updates
 * **Step 1**: Enable vulnerability alerts:
@@ -62,7 +64,7 @@ Allows security researchers to report vulnerabilities privately without public e
 
 ### ⚠️ The Monorepo & Multi-Language Trap
 * **The Problem**: GitHub CodeQL Default Setup assumes compiled languages (Java/Kotlin, Swift, C/C++, Go) have their build files (`build.gradle`, `.xcodeproj`, `Makefile`) located at the **repository root**.
-* If compiled code lives in a subfolder (e.g., `/phone-companion` or `/apple-companion`), default autobuild fails with:
+* If compiled code lives in a subfolder (e.g., `/mobile-app` or `/ios-app`), default autobuild fails with:
   `ERROR: CodeQL detected code written in Java/Kotlin but could not automatically build any of it.`
 * **Solution A (Recommended for Monorepos)**: Restrict CodeQL Default Setup to interpreted/script languages (`python`, `actions`, `javascript`) which require zero build steps:
   ```bash
@@ -72,16 +74,17 @@ Allows security researchers to report vulnerabilities privately without public e
   subprocess.run(['gh', 'api', '-X', 'PATCH', '/repos/:owner/:repo/code-scanning/default-setup', '--input', '-'], input=payload, text=True)
   "
   ```
-* **Solution B (Advanced Setup)**: Use a dedicated workflow file (`.github/workflows/codeql.yml`) with manual build commands specifying the directory (`cd phone-companion && ./gradlew assembleDebug`).
+* **Solution B (Advanced Setup)**: Use a dedicated workflow file (`.github/workflows/codeql.yml` from `github-security/codeql-advanced.template.yml`) with manual build commands specifying the directory (`cd mobile-app && ./gradlew assembleDebug`).
 
-### ⚠️ CWE-275 Least-Privilege Actions Permissions Alert
+### ⚠️ CWE-275 Least-Privilege Actions Permissions & SHA Pinning
 CodeQL flags workflows lacking explicit permissions with:
 `actions/missing-workflow-permissions: Workflow does not limit the permissions of the GITHUB_TOKEN.`
-* **Fix**: Always add an explicit least-privilege `permissions` block to every workflow:
+* **Fix 1 (Least Privilege)**: Always add an explicit least-privilege `permissions` block to every workflow:
   ```yaml
   permissions:
     contents: read
   ```
+* **Fix 2 (Supply-Chain SHA Pinning)**: Pin third-party GitHub Actions to full 40-character commit SHAs (`actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2`) with `persist-credentials: false`.
 
 ### ⚠️ CWE-338 Insecure Randomness Prevention
 CodeQL statically analyzes random number generation in JavaScript/TypeScript and flags uses of `Math.random()` in identifiers, tokens, and simulation seeds with:

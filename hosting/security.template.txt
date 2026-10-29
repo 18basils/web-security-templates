@@ -1,0 +1,10 @@
+# ==============================================================================
+# RFC 9116 SECURITY.TXT TEMPLATE
+# Deploy to your web root at: /.well-known/security.txt
+# ==============================================================================
+
+Contact: https://github.com/:owner/:repo/security/advisories/new
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://example.com/.well-known/security.txt
+Policy: https://github.com/:owner/:repo/blob/main/SECURITY.md

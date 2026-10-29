@@ -6,7 +6,7 @@
   <title>Accessible Web Tab View Component</title>
   <style>
     /* ==============================================================================
-     * MODERN DARK GLASSMORHPIC TAB VIEW COMPONENT
+     * MODERN DARK GLASSMORPHIC TAB VIEW COMPONENT
      * ============================================================================== */
     :root {
       --bg-midnight: #080c15;
@@ -167,30 +167,30 @@
     <div id="panel-windows" class="tab-panel active" role="tabpanel" aria-labelledby="tab-windows">
       <h3>Windows 10 / 11 Setup</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem;">Runs as a standalone portable app or full user-space installer.</p>
-      <pre><code># Install via PowerShell or download Setup.exe
-winget install 18basils.DesktopCompanion</code></pre>
+      <pre><code># Install via winget or download Setup.exe
+winget install :owner.:project</code></pre>
     </div>
 
     <div id="panel-macos" class="tab-panel" role="tabpanel" aria-labelledby="tab-macos">
       <h3>Apple macOS Setup (Apple Silicon & Intel)</h3>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Integrates directly into your Mac Menu Bar with floating desktop pet overlay.</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Universal binary package for macOS Sonoma & Sequoia.</p>
       <pre><code># Mount the DMG and copy to Applications
-open Apple-Companion-macOS.dmg
-cp -R "/Volumes/Apple Companion/Apple Companion.app" /Applications/</code></pre>
+open Project-macOS.dmg
+cp -R "/Volumes/Project/Project.app" /Applications/</code></pre>
     </div>
 
     <div id="panel-linux" class="tab-panel" role="tabpanel" aria-labelledby="tab-linux">
       <h3>Linux AppImage Setup</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem;">Zero-install single binary compatible with Ubuntu, Fedora, and Arch.</p>
-      <pre><code>chmod +x DesktopCompanion-x86_64.AppImage
-./DesktopCompanion-x86_64.AppImage</code></pre>
+      <pre><code>chmod +x Project-x86_64.AppImage
+./Project-x86_64.AppImage</code></pre>
     </div>
 
     <div id="panel-mobile" class="tab-panel" role="tabpanel" aria-labelledby="tab-mobile">
       <h3>Android & iOS Mobile Installation</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem;">Point your phone camera at the screen QR code or install direct APK/TestFlight builds.</p>
       <pre><code># Android direct install
-adb install Phone.Companion.apk</code></pre>
+adb install Project-Android.apk</code></pre>
     </div>
   </div>
 

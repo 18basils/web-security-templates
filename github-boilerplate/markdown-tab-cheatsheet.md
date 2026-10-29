@@ -10,7 +10,7 @@ The cleanest native way to present multi-platform installation guides or code sn
 
 ### Example Code:
 
-```markdown
+````markdown
 <!-- Tab 1: Windows (Active / Open by default with 'open' attribute) -->
 <details open>
 <summary><b>💻 Windows Installation (Click to toggle)</b></summary>
@@ -28,7 +28,7 @@ winget install :owner.:project
 <br>
 
 ```bash
-brew install :project
+brew install --cask :project
 # Or drag App to /Applications
 ```
 </details>
@@ -42,7 +42,7 @@ brew install :project
 sudo snap install :project
 ```
 </details>
-```
+````
 
 ---
 
@@ -77,10 +77,10 @@ For comparing feature parity across multiple operating systems or subscription t
 ```markdown
 | Feature | Windows 10/11 | macOS Sonoma/Sequoia | Android (Compose) | iOS (SwiftUI) |
 | :--- | :---: | :---: | :---: | :---: |
-| **Hydration Goal Tracking** | ✅ | ✅ | ✅ | ✅ |
-| **Floating Mascot Overlay** | ✅ | ✅ | ❌ | ❌ |
+| **Core Sync Engine** | ✅ | ✅ | ✅ | ✅ |
+| **Hardware Acceleration** | ✅ | ✅ | ✅ | ✅ |
 | **System Tray / Menu Bar** | ✅ | ✅ | ❌ | ❌ |
-| **Lock Screen Widgets** | ❌ | ❌ | ✅ | ✅ |
+| **Home Screen Widgets** | ❌ | ❌ | ✅ | ✅ |
 | **Offline Execution** | ✅ | ✅ | ✅ | ✅ |
 ```
 

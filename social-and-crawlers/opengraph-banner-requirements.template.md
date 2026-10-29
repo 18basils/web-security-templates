@@ -75,32 +75,32 @@ Different platforms display cards in different ways: mobile chat bubbles crop ed
 
 ## 4. Complete HTML `<head>` Meta Tags Template
 
-Place this block inside your `<head>` tag. Replace the `{{...}}` placeholders with your actual site values:
+Place this block inside your `<head>` tag (see `social-and-crawlers/html-head-meta.template.html` for the full version):
 
 ```html
 <!-- Open Graph / Facebook / LinkedIn / WhatsApp / Slack -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://{{YOUR_DOMAIN}}/">
-<meta property="og:site_name" content="{{YOUR_BRAND_NAME}}">
-<meta property="og:title" content="{{PAGE_TITLE}}">
-<meta property="og:description" content="{{PAGE_DESCRIPTION_150_CHARS}}">
-<meta property="og:image" content="https://{{YOUR_DOMAIN}}/assets/og-image.png">
-<meta property="og:image:secure_url" content="https://{{YOUR_DOMAIN}}/assets/og-image.png">
+<meta property="og:url" content="https://example.com/">
+<meta property="og:site_name" content="Your Brand">
+<meta property="og:title" content="Your Website Title - Catchy Slogan">
+<meta property="og:description" content="A clear, concise description of your service for social link cards.">
+<meta property="og:image" content="https://example.com/assets/og-image.png">
+<meta property="og:image:secure_url" content="https://example.com/assets/og-image.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="{{BRAND_NAME}} - Preview Banner">
+<meta property="og:image:alt" content="Your Brand Website Preview Card">
 <meta property="og:locale" content="en_US">
 
 <!-- Twitter / X Cards -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://{{YOUR_DOMAIN}}/">
-<meta name="twitter:site" content="@{{YOUR_TWITTER_HANDLE}}">
-<meta name="twitter:creator" content="@{{YOUR_TWITTER_HANDLE}}">
-<meta name="twitter:title" content="{{PAGE_TITLE}}">
-<meta name="twitter:description" content="{{PAGE_DESCRIPTION_150_CHARS}}">
-<meta name="twitter:image" content="https://{{YOUR_DOMAIN}}/assets/og-image.png">
-<meta name="twitter:image:alt" content="{{BRAND_NAME}} - Preview Banner">
+<meta name="twitter:url" content="https://example.com/">
+<meta name="twitter:site" content="@your_brand_handle">
+<meta name="twitter:creator" content="@your_creator_handle">
+<meta name="twitter:title" content="Your Website Title - Catchy Slogan">
+<meta name="twitter:description" content="A clear, concise description of your service for social link cards.">
+<meta name="twitter:image" content="https://example.com/assets/og-image.png">
+<meta name="twitter:image:alt" content="Your Brand Website Preview Card">
 ```
 
 > [!TIP]
@@ -118,5 +118,5 @@ Test your live URL or preview card before publishing:
    - [https://developers.facebook.com/tools/debug/](https://developers.facebook.com/tools/debug/)
 3. **LinkedIn Post Inspector (Clears LinkedIn Cache)**:
    - [https://www.linkedin.com/post-inspector/](https://www.linkedin.com/post-inspector/)
-4. **Twitter / X Card Preview**:
-   - Test by composing a tweet or DM on [https://tweetdeck.twitter.com](https://tweetdeck.twitter.com).
+4. **Twitter / X Card Validator**:
+   - Test by composing a post or DM on [https://x.com](https://x.com).

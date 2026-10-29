@@ -11,7 +11,7 @@ Save 100–300 ms on DNS lookups and TLS handshakes by preconnecting to critical
 ```html
 <!-- Google Analytics / Tag Manager -->
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
-<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://www.google-analytics.com">
 
 <!-- Google Fonts (if used) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
