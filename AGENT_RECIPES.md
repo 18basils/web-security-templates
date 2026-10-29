@@ -30,8 +30,9 @@ SWITCH (target.hostingPlatform):
 ### 1.1 IF `hostingPlatform == "firebase"`:
 1. Copy `hosting/firebase.template.json` to the project root as `firebase.json` (or merge the `"headers"` array into the existing `firebase.json`).
 2. Ensure public folder matches target (`"public": "public"` or `"public": "dist"`).
-3. Test locally with `firebase emulators:start --only hosting`.
-4. Deploy with `firebase deploy --only hosting`.
+3. Ensure SPA client routing has `"rewrites": [{ "source": "**", "destination": "/index.html" }]`.
+4. Test locally with `firebase emulators:start --only hosting`.
+5. Deploy with `firebase deploy --only hosting`.
 
 ### 1.2 IF `hostingPlatform == "vercel"`:
 1. Copy `hosting/vercel.template.json` to the project root as `vercel.json` (or merge the `"headers"` array).
@@ -92,7 +93,7 @@ object-src 'none';
 ### 3.2 IF `features.googleAnalytics == true`:
 * **HTML `<head>`**:
   ```html
-  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   ```
@@ -111,9 +112,9 @@ object-src 'none';
   * `style-src`: add `https://fonts.googleapis.com`
   * `font-src`: add `https://fonts.gstatic.com`
 
-### 3.4 IF `features.qrCodeGenerator == true` (e.g. qrserver):
+### 3.4 IF `features.qrCodeGenerator == true` (e.g. qrserver) OR `clientExports == true`:
 * **CSP Header Additions**:
-  * `img-src`: add `https://api.qrserver.com`
+  * `img-src`: add `data: blob: https://api.qrserver.com`
 
 ### 3.5 IF `features.stripePayments == true`:
 * **CSP Header Additions**:
@@ -154,12 +155,21 @@ IF target.hasHeavyBinaries (> 10 MB, e.g. .zip, .exe, .apk, .dmg, .ipa):
 3. Ensure primary CTA button carries ID `primaryDownloadBtn` and badge carries `deviceBadge`.
 
 ### 5.2 IF `features.progressiveWebApp == true`:
-1. Copy `client-features/manifest.template.json` to web root as `manifest.json`.
-2. Add in HTML `<head>`:
+1. Copy `client-features/manifest.template.json` to web root as `site.webmanifest` (or `manifest.json`).
+2. Copy `client-features/sw.template.js` to web root as `sw.js` (or `public/sw.js`).
+3. Add in HTML `<head>`:
    ```html
-   <link rel="manifest" href="/manifest.json">
+   <link rel="manifest" href="/site.webmanifest">
    <meta name="theme-color" content="#080c15">
-   <link rel="apple-touch-icon" href="/assets/icon-180.png">
+   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+   ```
+4. Register the Service Worker in your client entry point:
+   ```javascript
+   if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+     window.addEventListener('load', () => {
+       navigator.serviceWorker.register('/sw.js');
+     });
+   }
    ```
 
 ---
@@ -175,13 +185,21 @@ IF target.hasHeavyBinaries (> 10 MB, e.g. .zip, .exe, .apk, .dmg, .ipa):
    ```bash
    gh api -X PUT /repos/:owner/:repo/private-vulnerability-reporting -f enabled=true
    ```
-3. **Fork Workflow Protection**: In `Settings > Actions > General`, set fork pull requests to "Require approval for all outside collaborators".
-4. **Branch Protection**: Protect `main` branch against force-pushes (`git push --force`) and deletions.
+3. **Fork Workflow Protection & Least-Privilege Defaults**:
+   In `Settings > Actions > General`, set fork pull requests to "Require approval for all outside collaborators", or run:
+   ```bash
+   gh api -X PUT /repos/:owner/:repo/actions/permissions/workflow \
+     -f default_workflow_permissions=read \
+     -F can_approve_pull_request_reviews=false
+   ```
+4. **Branch Protection & Rulesets**:
+   Protect `main` branch against force-pushes (`git push --force`) and deletions using GitHub Rulesets.
 5. **Dependabot Configuration**:
    * Deploy `github-security/dependabot.template.yml` as `.github/dependabot.yml`.
    * **MANDATORY STEP**: Create repository labels first to prevent Dependabot PR failures:
      ```bash
      gh label create dependencies --description "Updates dependencies" --color "0366D6"
+     gh label create npm --description "JavaScript/TypeScript packages" --color "CB3837"
      gh label create python --description "Python dependencies" --color "3572A5"
      gh label create github-actions --description "GitHub Actions workflows" --color "2088FF"
      ```
@@ -190,11 +208,12 @@ IF target.hasHeavyBinaries (> 10 MB, e.g. .zip, .exe, .apk, .dmg, .ipa):
      ```bash
      python -c "
      import json, subprocess
-     payload = json.dumps({'state': 'configured', 'languages': ['actions', 'python'], 'query_suite': 'default'})
+     payload = json.dumps({'state': 'configured', 'languages': ['actions', 'python', 'javascript'], 'query_suite': 'default'})
      subprocess.run(['gh', 'api', '-X', 'PATCH', '/repos/:owner/:repo/code-scanning/default-setup', '--input', '-'], input=payload, text=True)
      "
      ```
    * **CWE-275 least-privilege fix**: Ensure all `.github/workflows/*.yml` contain `permissions: contents: read`.
+   * **CWE-338 Insecure Randomness Prevention**: Replace `Math.random()` with `crypto.randomUUID()` for unique entity identifiers, or `window.crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1)` for floats.
 7. **Add Status Badges**: Add live badges to `README.md` header:
    ```markdown
    [![Release](https://img.shields.io/badge/release-v2.0.0-blue?logo=github)](https://github.com/:owner/:repo/releases/latest)
@@ -211,6 +230,8 @@ IF target.hasHeavyBinaries (> 10 MB, e.g. .zip, .exe, .apk, .dmg, .ipa):
 3. **Critical CSS**: Inline above-the-fold layout CSS in `<head>`.
 4. **Deferred JS**: Use `defer` or `async` on all scripts.
 5. **Modern Vector & WebP Assets**: Convert raster assets to WebP; use SVGs for UI icons.
+6. **Parallel Vendor Code Splitting**: In Vite/Rollup (`vite.config.js`), use `manualChunks` to split React, icon packages, and large third-party modules into parallel chunks. (See `pagespeed-and-performance/vite.config.template.js`).
+7. **Header Caching**: Enforce `no-cache, no-store, must-revalidate` for `/index.html` and `/sw.js`, and `max-age=31536000, immutable` for `/assets/**`.
 
 ---
 
@@ -218,10 +239,10 @@ IF target.hasHeavyBinaries (> 10 MB, e.g. .zip, .exe, .apk, .dmg, .ipa):
 
 1. **Banner Requirements**:
    * Exactly **`1200 x 630` px** (1.91:1 ratio).
-   * **File size under 300 KB** (WhatsApp preview requirement).
+   * **File size under 300 KB** (WhatsApp preview requirement - prefer high-quality JPEG at quality=85-88 for complex art, or compressed PNG).
    * Safe zone: 80 px left/right, 60 px top/bottom.
 2. **Instant Banner Creation**: Run `python social-and-crawlers/generate_og_banner.template.py`.
-3. **HTML Meta Tags**: Copy `social-and-crawlers/html-head-meta.template.html` into target `<head>`.
+3. **HTML Meta Tags**: Copy `social-and-crawlers/html-head-meta.template.html` into target `<head>`. (Includes `<link rel="image_src">` fallback and Schema.org JSON-LD).
 4. **Crawler Policy**: Copy `social-and-crawlers/robots.template.txt` to web root as `robots.txt`.
 
 ---
@@ -237,7 +258,10 @@ IF target.needsDocumentationBoilerplate == true:
    * Copy `github-boilerplate/CONTRIBUTING.template.md` to project root as `CONTRIBUTING.md`.
    * Copy `github-boilerplate/PULL_REQUEST_TEMPLATE.template.md` to `.github/PULL_REQUEST_TEMPLATE.md`.
    * Copy `github-boilerplate/CHANGELOG.template.md` to project root as `CHANGELOG.md`.
-2. **Deploy Issue Forms**:
+2. **Deploy License**:
+   * For open-source projects: Deploy MIT, Apache 2.0, or BSD.
+   * For commercial/proprietary products: Copy `github-boilerplate/LICENSE-PROPRIETARY.template.md` to project root as `LICENSE.md`.
+3. **Deploy Issue Forms**:
    * Copy `github-boilerplate/issue-templates/*.template.yml` into `.github/ISSUE_TEMPLATE/` (rename removing `.template`).
    * This provides structured forms for Bug Reports, Feature Requests, and redirects security bugs to private advisories.
 
@@ -261,4 +285,3 @@ SWITCH (target.tabContext):
   * Buttons: `role="tab"`, `aria-selected="true|false"`, `aria-controls="panel-id"`
   * Content: `role="tabpanel"`, `aria-labelledby="tab-id"`, `.tab-panel.active`
   * Provides seamless keyboard navigation (`ArrowLeft`, `ArrowRight`, `Home`, `End`) and dark glassmorphic styling.
-

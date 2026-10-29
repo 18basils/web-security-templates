@@ -1,5 +1,5 @@
 <!-- ============================================================================== -->
-<!-- HTML <head> SECURITY, SEO & OPENGRAPH META TEMPLATE                             -->
+<!-- HTML <head> SECURITY, SEO, OPENGRAPH & STRUCTURED DATA TEMPLATE                  -->
 <!-- See opengraph-banner-requirements.template.md for image dimensions & safe zone  -->
 <!-- Use generate_og_banner.template.py to generate your 1200x630 banner (<300 KB)   -->
 <!-- ============================================================================== -->
@@ -29,7 +29,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 
 <!-- Open Graph / Facebook / LinkedIn / WhatsApp / Slack -->
-<!-- Note: og:image MUST be an absolute HTTPS URL and ideally under 300 KB for WhatsApp -->
+<!-- Note: og:image MUST be an absolute HTTPS URL and under 300 KB for WhatsApp preview cards -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://example.com/">
 <meta property="og:site_name" content="Your Brand">
@@ -43,6 +43,9 @@
 <meta property="og:image:alt" content="Your Brand Website Preview Card">
 <meta property="og:locale" content="en_US">
 
+<!-- WhatsApp & Legacy Messenger Link Preview Fallback -->
+<link rel="image_src" href="https://example.com/assets/og-image.png">
+
 <!-- Twitter / X Large Summary Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://example.com/">
@@ -52,3 +55,25 @@
 <meta name="twitter:description" content="A clear, concise description of your service for social link cards.">
 <meta name="twitter:image" content="https://example.com/assets/og-image.png">
 <meta name="twitter:image:alt" content="Your Brand Website Preview Card">
+
+<!-- Resource Hints for High Performance & Core Web Vitals -->
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+
+<!-- Schema.org Structured Data (WebApplication / SoftwareApplication JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Your Website Title",
+  "url": "https://example.com/",
+  "description": "A clear, concise description of your service for search engines and rich snippets.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>

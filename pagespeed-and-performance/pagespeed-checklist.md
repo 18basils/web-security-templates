@@ -10,8 +10,8 @@ Save 100–300 ms on DNS lookups and TLS handshakes by preconnecting to critical
 
 ```html
 <!-- Google Analytics / Tag Manager -->
-<link rel="preconnect" href="https://www.googletagmanager.com">
-<link rel="dns-prefetch" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
 
 <!-- Google Fonts (if used) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +55,7 @@ Layout shift destroys user experience and heavily penalizes your Core Web Vitals
    <img src="/assets/hero.webp" width="600" height="400" alt="Hero illustration" style="aspect-ratio: 3/2; max-width: 100%; height: auto;">
    ```
 2. **Reserve container space for dynamic elements**:
-   If an element is populated via JavaScript (like QR codes or user avatars), give the parent container an explicit minimum height (`min-height: 200px;`) so the page doesn't jump when the asset loads.
+   If an element is populated via JavaScript (like QR codes, dynamic charts, or user avatars), give the parent container an explicit minimum height (`min-height: 200px;`) so the page doesn't jump when the asset loads.
 
 ---
 
@@ -87,8 +87,9 @@ Configure caching headers in your hosting configuration (`firebase.json`, `verce
 | Asset Type | Cache-Control Header | Reason |
 | :--- | :--- | :--- |
 | **HTML (`/index.html`)** | `no-cache, no-store, must-revalidate` | Ensures users immediately receive new releases without manual browser refreshes. |
+| **Service Worker (`/sw.js`)** | `no-cache, no-store, must-revalidate` | Prevents clients from getting trapped on outdated PWA service workers. |
 | **Hashed Static Assets (`*.js`, `*.css`, `*.woff2`)** | `public, max-age=31536000, immutable` | Cached for 1 full year; instantaneous subsequent page loads. |
-| **Images & SVGs** | `public, max-age=86400` (or 1 week) | Balances freshness with high cache hit rates. |
+| **Images & SVGs** | `public, max-age=604800, stale-while-revalidate=86400` | Balances freshness with high cache hit rates. |
 | **Download Binaries (`/downloads/*`)** | `public, max-age=86400, attachment` | Relieves server load and triggers direct browser download manager. |
 
 ---
@@ -100,3 +101,34 @@ Configure caching headers in your hosting configuration (`firebase.json`, `verce
   ```html
   <link rel="preload" href="/fonts/inter-bold.woff2" as="font" type="font/woff2" crossorigin>
   ```
+
+---
+
+## ⚡ 7. Parallel Vendor Code Splitting & Bundler Optimization
+
+Monolithic JavaScript bundles trigger high **Total Blocking Time (TBT)** during V8 parse & compilation:
+
+1. **Split Heavy Vendor Packages**:
+   Configure your bundler (Vite, Rollup, Webpack) to separate framework runtime, icons, and utilities into dedicated chunks:
+   ```javascript
+   // vite.config.js
+   build: {
+     target: 'es2022',
+     rollupOptions: {
+       output: {
+         manualChunks(id) {
+           if (id.includes('node_modules')) {
+             if (id.includes('react')) return 'vendor-react';
+             if (id.includes('icons') || id.includes('lucide')) return 'vendor-icons';
+             return 'vendor-libs';
+           }
+         }
+       }
+     }
+   }
+   ```
+   *(See `pagespeed-and-performance/vite.config.template.js` for the complete reference implementation).*
+2. **Benefits**:
+   * Takes full advantage of HTTP/2 parallel multiplexing.
+   * Subsequent deployments only invalidate modified chunks instead of the entire app bundle.
+   * Keeps the main thread responsive, ensuring zero Total Blocking Time on mobile devices.

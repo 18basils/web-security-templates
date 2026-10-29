@@ -3,9 +3,9 @@
 # ==============================================================================
 # IMPORTANT: Before enabling, ensure the labels specified below exist in your repo:
 # gh label create dependencies --description "Updates dependencies" --color "0366D6"
+# gh label create npm --description "JavaScript/TypeScript packages" --color "CB3837"
 # gh label create python --description "Python dependencies" --color "3572A5"
 # gh label create github-actions --description "GitHub Actions workflows" --color "2088FF"
-# gh label create npm --description "JavaScript/TypeScript packages" --color "CB3837"
 # gh label create android --description "Android & Gradle packages" --color "3DDC84"
 
 version: 2
@@ -20,25 +20,25 @@ updates:
       - "dependencies"
       - "github-actions"
 
-  # 2. Python Packages (pip) - Uncomment if Python is used
-  - package-ecosystem: "pip"
+  # 2. Node.js / Web Packages (npm)
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
-      - "python"
+      - "npm"
 
-  # 3. Node.js / Web Packages (npm) - Uncomment if Node.js is used
-  # - package-ecosystem: "npm"
+  # 3. Python Packages (pip) - Uncomment if Python is used
+  # - package-ecosystem: "pip"
   #   directory: "/"
   #   schedule:
   #     interval: "weekly"
   #   open-pull-requests-limit: 10
   #   labels:
   #     - "dependencies"
-  #     - "npm"
+  #     - "python"
 
   # 4. Android / Java / Kotlin (gradle) - Uncomment if Android is used
   # - package-ecosystem: "gradle"
