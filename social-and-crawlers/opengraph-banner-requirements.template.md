@@ -38,7 +38,15 @@ Whenever auditing or patching a project where an Open Graph banner (`og-image.pn
 
 ---
 
-## 3. Safe Zone & Visual Composition
+## 3. Reference Production Banner Preview
+
+<p align="center">
+  <img src="og-banner-preview.png" alt="Open Graph 1200x630 Reference Banner" width="800" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+</p>
+
+---
+
+## 4. Safe Zone & Visual Composition
 
 Different platforms display cards in different ways: mobile chat bubbles crop edges, Twitter adds rounded corners, and Facebook overlays play buttons on videos.
 
@@ -77,7 +85,7 @@ Different platforms display cards in different ways: mobile chat bubbles crop ed
 
 ---
 
-## 4. Platform-by-Platform Card Behaviors
+## 5. Platform-by-Platform Card Behaviors
 
 | Platform | Card Type | Behavior & Gotchas |
 | :--- | :--- | :--- |
@@ -91,7 +99,7 @@ Different platforms display cards in different ways: mobile chat bubbles crop ed
 
 ---
 
-## 5. Complete HTML `<head>` Meta Tags Template
+## 6. Complete HTML `<head>` Meta Tags Template
 
 Place this block inside your `<head>` tag (see `social-and-crawlers/html-head-meta.template.html` for the full version):
 
@@ -126,7 +134,7 @@ Place this block inside your `<head>` tag (see `social-and-crawlers/html-head-me
 
 ---
 
-## 6. Free Testing & Validation Tools
+## 7. Free Testing & Validation Tools
 
 Test your live URL or preview card before publishing:
 

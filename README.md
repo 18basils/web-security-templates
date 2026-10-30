@@ -9,6 +9,10 @@
 [![Security Policy](https://img.shields.io/badge/security-SECURITY.md-blue)](SECURITY.md)
 [![License](https://img.shields.io/badge/license-terms-lightgrey)](LICENSE.md)
 
+<p align="center">
+  <img src="social-and-crawlers/og-banner-preview.png" alt="Web Security & Bot Defense Blueprint Suite Open Graph Banner" width="800" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+</p>
+
 A modular, production-grade security, optimization, and automation blueprint repository. Designed as an **Agent Execution Playbook** so developers and AI coding agents can parse conditional "Switch Cases" to patch security headers, bot defense policies, repository security, PageSpeed optimizations, Open Graph cards, and live `.md` / GitHub `About` metadata synchronization into any project in one command—**without ever overriding or breaking the target product's intended purpose**.
 
 ---
@@ -74,7 +78,8 @@ web-security-templates/
     ├── robots.template.txt            # Hardened robots.txt (allows search bots & OG, blocks AI scrapers)
     ├── html-head-meta.template.html   # SEO, OpenGraph, Twitter Cards, PWA head tags & Schema.org JSON-LD
     ├── opengraph-banner-requirements.template.md # 1200x630, <300 KB WhatsApp rule & safe zones
-    └── generate_og_banner.template.py # 1-click Python PIL script to generate dark-gradient banners
+    ├── generate_og_banner.template.py # 1-click Python PIL script to generate dark-gradient banners
+    └── og-banner-preview.png          # Reference 1200x630 social share banner (<300 KB)
 ```
 
 ---

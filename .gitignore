@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+
+# Environment & local credentials
+.env
+.env.*
+*.local
+
+# Operating System & Editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
